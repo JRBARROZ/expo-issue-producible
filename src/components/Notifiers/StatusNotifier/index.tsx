@@ -8,10 +8,10 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 import IconButton from "../../Icon";
-import { GlobalContext } from "../../../contexts/GlobalContext";
+import { GlobalContext } from "@/contexts/GlobalContext";
 import styles from "./styles";
-import useTheme from "../../../hooks/useTheme";
-import { useNotifier } from "../../../hooks";
+import { useNotifier } from "@/hooks";
+import { useTheme } from "styled-components";
 
 const icons = {
   success: "checkmark-circle-sharp",
@@ -24,7 +24,7 @@ function StatusNotifier() {
   const theme = useTheme();
   const style = styles();
   const [isUnmounted, setIsUnmounted] = useState(true);
-  const { notifierStates } = useContext(GlobalContext);
+  const { notifierStates } = useContext(GlobalContext)!;
   const { closeNofication } = useNotifier();
 
   const yAxis = useSharedValue(-40);
@@ -37,7 +37,12 @@ function StatusNotifier() {
 
   function openNotifier() {
     setIsUnmounted(false);
-    yAxis.value = withTiming(StatusBar.currentHeight + 10);
+
+    if (StatusBar.currentHeight) {
+      yAxis.value = withTiming(StatusBar.currentHeight + 10);
+    } else {
+      yAxis.value = withTiming(10);
+    }
   }
 
   function unMountNotifier() {
@@ -46,14 +51,14 @@ function StatusNotifier() {
   }
 
   function closeNotifier() {
-    yAxis.value = withTiming(-40, null, () => runOnJS(unMountNotifier)());
+    yAxis.value = withTiming(-40, undefined, () => runOnJS(unMountNotifier)());
   }
 
   useEffect(() => {
     if (notifierStates) {
       openNotifier();
 
-      let timeoutId = null;
+      let timeoutId: NodeJS.Timeout;
 
       if (!notifierStates.noTimeout) {
         const delay = notifierStates.duration ?? 3000;
@@ -69,7 +74,7 @@ function StatusNotifier() {
     closeNotifier();
   }, [notifierStates]);
 
-  if (isUnmounted) return null;
+  if (isUnmounted || !notifierStates) return null;
 
   return (
     <Animated.View style={[style.container, animatedStyle]}>

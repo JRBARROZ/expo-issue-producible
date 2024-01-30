@@ -1,4 +1,6 @@
-const baseColors = {
+import { IColors, IColorsPattern } from "./types";
+
+const baseColors: IColorsPattern = {
   0: "#FFFFFF",
   50: "#FAFAFA",
   100: "#F5F5F5",
@@ -12,7 +14,7 @@ const baseColors = {
   900: "#18181b",
 };
 
-const lightColors = {
+const lightColors: IColors = {
   primary: {
     0: "#cbc7ff",
     50: "#A098FF",

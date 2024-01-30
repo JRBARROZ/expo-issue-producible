@@ -1,8 +1,11 @@
 import { baseColors } from "./colors";
+import { IShadow } from "./types";
 
-const shadows = {
+const shadowColor = baseColors[900] ?? "#000";
+
+const shadows: IShadow = {
   0: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -12,7 +15,7 @@ const shadows = {
     elevation: 1,
   },
   1: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -22,7 +25,7 @@ const shadows = {
     elevation: 2,
   },
   2: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -32,7 +35,7 @@ const shadows = {
     elevation: 3,
   },
   3: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -42,7 +45,7 @@ const shadows = {
     elevation: 4,
   },
   4: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -52,7 +55,7 @@ const shadows = {
     elevation: 5,
   },
   5: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -62,7 +65,7 @@ const shadows = {
     elevation: 6,
   },
   6: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -72,7 +75,7 @@ const shadows = {
     elevation: 7,
   },
   7: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -82,7 +85,7 @@ const shadows = {
     elevation: 8,
   },
   8: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -92,7 +95,7 @@ const shadows = {
     elevation: 9,
   },
   9: {
-    shadowColor: baseColors[900],
+    shadowColor,
     shadowOffset: {
       width: 0,
       height: 5,

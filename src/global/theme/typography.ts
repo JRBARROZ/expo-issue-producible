@@ -1,4 +1,6 @@
-const typography = {
+import { ITypography } from "./types";
+
+const typography: ITypography = {
   size: {
     body: 14,
     caption: 12,

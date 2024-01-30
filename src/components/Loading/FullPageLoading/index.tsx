@@ -10,7 +10,7 @@ function FullPageLoading() {
 
   const {
     loadingConfig: { isLoading, message, opacity = 0.9 },
-  } = useContext(GlobalContext);
+  } = useContext(GlobalContext)!;
 
   if (!isLoading) return null;
 

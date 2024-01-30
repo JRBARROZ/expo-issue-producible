@@ -1,10 +1,10 @@
 import { useCallback, useContext } from "react";
-import { GlobalContext } from "../contexts/GlobalContext";
+import { GlobalContext, INotifierStates } from "@/contexts/GlobalContext";
 
 function useNotifier() {
-  const { setNotifierStates } = useContext(GlobalContext);
+  const { setNotifierStates } = useContext(GlobalContext)!;
 
-  const openNotification = useCallback((config) => {
+  const openNotification = useCallback((config: INotifierStates) => {
     setNotifierStates(config);
   }, []);
 

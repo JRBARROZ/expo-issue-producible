@@ -1,25 +1,31 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { createContext, useCallback, useContext, useState } from "react";
+import { ReactNode, createContext, useCallback, useContext, useState } from "react";
 import { useQuery } from "react-query";
-import { useAuth } from "../services";
-import { OfflineControlContext } from "./OfflineControlContext";
-import { GlobalContext } from "./GlobalContext";
+// import { useAuth } from "@/services";
+import { GlobalContext } from "@/contexts/GlobalContext";
 
-const AuthContext = createContext({
-  user: null,
-  token: null,
-  loged: false,
-  handleLogout: () => {},
-  isValidatingAuth: false,
-});
+interface IAuthContextProps {
+  user: any;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
+  token: string | null;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
+  loged: boolean;
+  setLoged: React.Dispatch<React.SetStateAction<boolean>>;
+  handleLogout(): void;
+}
 
-function AuthProvider({ children }) {
+interface IAuthContextProviderProps {
+  children: ReactNode;
+}
+
+const AuthContext = createContext<IAuthContextProps | null>(null);
+
+function AuthProvider({ children }: IAuthContextProviderProps) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loged, setLoged] = useState(false);
-  const { connection } = useContext(OfflineControlContext);
-  const { validateToken } = useAuth();
-  const { loading } = useContext(GlobalContext);
+  // const { validateToken } = useAuth();
+  const { loading } = useContext(GlobalContext)!;
 
   const handleLogout = useCallback(async () => {
     await AsyncStorage.clear();
@@ -32,27 +38,24 @@ function AuthProvider({ children }) {
     "validate-token",
     () => {
       loading({ isLoading: true });
-      return validateToken();
+      // return validateToken();
     },
     {
-      retry: false,
-      refetchOnWindowFocus: false,
-      onSuccess: async (response) => {
+      enabled: false,
+      onSuccess: async (response: any) => {
         if (!response.valid) {
           setLoged(false);
         }
       },
       onError: () => {
-        if (connection?.isInternetReachable) {
-          setLoged(false);
-          loading({ isLoading: false });
-        }
+        setLoged(false);
+        loading({ isLoading: false });
       },
       onSettled: async (response) => {
         const user = await AsyncStorage.getItem("@user");
         const token = await AsyncStorage.getItem("@token");
 
-        if (!connection?.isInternetReachable && token || response?.valid) {
+        if (user && token && response?.valid) {
           setUser(JSON.parse(user));
           setToken(JSON.parse(token));
           setLoged(true);
@@ -62,7 +65,7 @@ function AuthProvider({ children }) {
           isLoading: false,
         });
       },
-    }
+    },
   );
 
   return (

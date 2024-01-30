@@ -2,18 +2,15 @@
   "expo": {
     "name": "Template App",
     "slug": "template-app",
-    "owner": "tscmexpo",
+    "scheme": "tscmexpo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/img/adaptive-icon.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
@@ -26,20 +23,23 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/img/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "config": {},
-      "package": "com.template.app",
-      "versionCode": 1
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff",
+        "config": {},
+        "package": "com.template.app",
+        "versionCode": 1
+      }
     },
     "web": {
-      "favicon": "./assets/img/favicon.png"
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "4ac914d4-f1c4-4585-9273-0cbede19c802"
-      }
-    }
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

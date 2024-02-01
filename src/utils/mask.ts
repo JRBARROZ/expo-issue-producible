@@ -1,4 +1,21 @@
-export const addSignPrefixAndSuffix = (value, options) => {
+import type {
+  FormatWithMaskProps,
+  FormatWithMaskResult,
+  CleanUpMask,
+  CreateNumberMaskProps,
+  Mask,
+  MaskArray,
+  CustomMask,
+  FormatNumberOptions,
+} from "@/types/Regex";
+interface AddSignPrefixAndSuffixProps {
+  sign?: "+" | "-" | "";
+  prefix?: string;
+  suffix?: string;
+  signPosition: "beforePrefix" | "afterPrefix";
+}
+
+export const addSignPrefixAndSuffix = (value: any, options: AddSignPrefixAndSuffixProps) => {
   const { prefix, sign, suffix, signPosition } = options;
 
   switch (signPosition) {
@@ -6,12 +23,10 @@ export const addSignPrefixAndSuffix = (value, options) => {
       return `${sign}${prefix}${value}${suffix}`;
     case "afterPrefix":
       return `${prefix}${sign}${value}${suffix}`;
-    default:
-      return null;
   }
 };
 
-export const formatCurrency = (input, options) => {
+export const formatCurrency = (input: number, options?: FormatNumberOptions) => {
   const {
     precision,
     separator = ",",
@@ -52,7 +67,7 @@ export const formatCurrency = (input, options) => {
     signPosition,
   });
 };
-export function formatWithMask(props) {
+export function formatWithMask(props: FormatWithMaskProps): FormatWithMaskResult {
   const { text, mask, obfuscationCharacter = "*" } = props;
 
   // make sure it'll not break with null or undefined inputs
@@ -134,26 +149,33 @@ export function formatWithMask(props) {
   return { masked, unmasked, obfuscated };
 }
 
-export function cleanUpMask(value, character, replacers) {
-  let formattedValue = null;
+export function cleanUpMask(
+  value: CleanUpMask,
+  character: string,
+  replacers: CustomMask | string[],
+) {
+  let formattedValue = value;
 
-  if (!!value) {
-    formattedValue = value;
+  if (Array.isArray(replacers)) {
     replacers.forEach((replacer) => {
       const escapedReplacer = replacer.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      formattedValue = formattedValue.replace(escapedReplacer, character);
+      const regex = new RegExp(escapedReplacer, "g");
+      formattedValue = formattedValue.replace(regex, character);
     });
+  } else {
+    formattedValue = formattedValue.replace(replacers, character);
   }
+
   return formattedValue;
 }
 
-export function createNumberMask(props) {
+export function createNumberMask(props?: CreateNumberMaskProps): Mask {
   const { delimiter = ".", precision = 2, prefix = [], separator = "," } = props || {};
 
-  return (value) => {
+  return (value?: string) => {
     const numericValue = value?.replace(/\D+/g, "") || "";
 
-    const mask = numericValue.split("").map(() => /\d/);
+    const mask: MaskArray = numericValue.split("").map(() => /\d/);
 
     const shouldAddSeparatorOnMask = precision > 0 && !!separator;
 
@@ -177,3 +199,38 @@ export function createNumberMask(props) {
     return [...prefix, ...mask];
   };
 }
+
+export const DATE_DDMMYYYY: Mask = (text = "") => {
+  const cleanText = text.replace(/\D+/g, "");
+
+  let secondDigitDayMask = /\d/;
+
+  if (cleanText.charAt(0) === "0") {
+    secondDigitDayMask = /[1-9]/;
+  }
+  if (cleanText.charAt(0) === "3") {
+    secondDigitDayMask = /[01]/;
+  }
+
+  let secondDigitMonthMask = /\d/;
+
+  if (cleanText.charAt(2) === "0") {
+    secondDigitMonthMask = /[1-9]/;
+  }
+  if (cleanText.charAt(2) === "1") {
+    secondDigitMonthMask = /[012]/;
+  }
+
+  return [
+    /[0-3]/,
+    secondDigitDayMask,
+    "/",
+    /[0-1]/,
+    secondDigitMonthMask,
+    "/",
+    /\d/,
+    /\d/,
+    /\d/,
+    /\d/,
+  ];
+};

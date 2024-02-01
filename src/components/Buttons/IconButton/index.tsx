@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import styles from "./styles";
+import { IIconButtonProps } from "./types";
+import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
-export default function IconButton({
+export default function IconButton<T extends ExpoVectorIcon = ExpoVectorIcon>({
   icon,
   name,
   color,
@@ -10,7 +12,7 @@ export default function IconButton({
   activeOpacity = 0.7,
   style,
   onPress,
-}) {
+}: IIconButtonProps<T>) {
   const iconButtonStyles = styles();
   const [focused, setFocused] = useState(false);
 
@@ -18,7 +20,11 @@ export default function IconButton({
     if (onPress) setFocused((focused) => !focused);
   }, []);
 
-  const Icon = icon;
+  const Icon = icon as unknown;
+
+  function isIcon(value: any): value is ExpoVectorIcon {
+    return !!value;
+  }
 
   return (
     <TouchableOpacity
@@ -33,7 +39,7 @@ export default function IconButton({
       onPress={onPress}
       activeOpacity={activeOpacity}
     >
-      {Icon && <Icon name={name} color={color} size={size} />}
+      {isIcon(Icon) && <Icon name={name} color={color} size={size} />}
     </TouchableOpacity>
   );
 }

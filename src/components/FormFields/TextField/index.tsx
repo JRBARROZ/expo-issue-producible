@@ -7,8 +7,17 @@ import { formatWithMask } from "../../../utils/mask";
 import styles from "./styles";
 import { ErrorMessage, Label } from "../FieldUtilitaries";
 import { IconButton } from "../../Buttons";
+import { ITextFieldProps } from "./types";
+import { ExpoVectorIcon, IconWithName } from "@/types/ExpoVectorIcons";
 
-function TextField({
+const defaultController: any = {
+  field: {},
+  formState: {
+    errors: {},
+  },
+};
+
+function TextField<T extends IconWithName = ExpoVectorIcon>({
   name,
   value,
   control,
@@ -32,18 +41,11 @@ function TextField({
   onBlur,
   onEndEditing,
   onFocus,
-}) {
+}: ITextFieldProps<T>) {
   const theme = useTheme();
   const textFieldStyles = styles();
   const [focused, setFocused] = useState(false);
   const [visibility, setVisibility] = useState(() => (password ? "visibility" : "visibility-off"));
-
-  const defaultController = {
-    field: {},
-    formState: {
-      errors: {},
-    },
-  };
 
   const {
     field,
@@ -150,12 +152,12 @@ function TextField({
       {(rightIcon || password) && (
         <IconButton
           style={[textFieldStyles.rightIcon, showErrorMessage && error && { bottom: 34 }]}
-          name={password ? visibility : rightIcon.name}
-          icon={password ? MaterialIcons : rightIcon.icon}
+          name={password ? visibility : rightIcon!.name}
+          icon={password ? MaterialIcons : rightIcon!.icon}
           color={rightIcon?.color || theme.colors.primary[200]}
           size={24}
           activeOpacity={rightIcon?.onPress ? 0.7 : 1}
-          onPress={password ? toggleVisibility : rightIcon.onPress}
+          onPress={password ? toggleVisibility : rightIcon!.onPress}
         />
       )}
       <ErrorMessage>{showErrorMessage ? error : null}</ErrorMessage>

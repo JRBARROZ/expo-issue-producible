@@ -8,9 +8,9 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { useTheme } from "styled-components";
 import styles from "./styles";
 import { ErrorMessage, Label } from "../FieldUtilitaries";
-import useTheme from "../../../hooks/useTheme";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -50,12 +50,12 @@ function SwithcField({
     backgroundColor: interpolateColor(
       activeSlide.value,
       [false, true],
-      [theme.colors.secondary[100], theme.colors.primary[200]]
+      [theme.colors.secondary[100], theme.colors.primary[200]],
     ),
     borderColor: interpolateColor(
       activeSlide.value,
       [false, true],
-      [theme.colors.secondary[300], theme.colors.primary[200]]
+      [theme.colors.secondary[300], theme.colors.primary[200]],
     ),
   }));
 

@@ -7,8 +7,8 @@ import Animated, {
   withTiming,
   withSequence,
 } from "react-native-reanimated";
+import { useTheme } from "styled-components";
 import styles from "./styles";
-import useTheme from "../../../hooks/useTheme";
 import { IconButton, MainButton } from "../../Buttons";
 
 function Alert({
@@ -49,7 +49,7 @@ function Alert({
     xAxis.value = withSequence(
       withTiming(20, { duration: 170 }),
       withTiming(-20, { duration: 170 }),
-      withTiming(0)
+      withTiming(0),
     );
   };
 

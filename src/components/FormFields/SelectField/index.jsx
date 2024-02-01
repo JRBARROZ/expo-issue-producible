@@ -3,9 +3,9 @@ import { useController } from "react-hook-form";
 import { Dimensions, Keyboard, Pressable, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useBottomSheetDynamicSnapPoints } from "@gorhom/bottom-sheet";
+import { useTheme } from "styled-components";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import TextField from "../TextField";
-import useTheme from "../../../hooks/useTheme";
 import styles from "./styles";
 import { BottomSheetList } from "../../BottomSheets";
 import { useBottomSheet } from "../../../hooks";
@@ -66,7 +66,7 @@ function SelectField({
       setTextValue(accessObjectByString(field.value, optionLabelKey));
     } else if (optionValueKey) {
       const findedOption = options.find(
-        (item) => accessObjectByString(item, optionValueKey) === field.value
+        (item) => accessObjectByString(item, optionValueKey) === field.value,
       );
       setTextValue(accessObjectByString(findedOption, optionLabelKey));
     }

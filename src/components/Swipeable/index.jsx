@@ -3,10 +3,10 @@ import { TouchableOpacity, View } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { useTheme } from "styled-components";
 import { Alert } from "../Dialogs";
 import accessObjectByString from "../../utils/accessObjectByString";
 import Icon from "../Icon";
-import useTheme from "../../hooks/useTheme";
 import styles from "./styles";
 
 function Swipeable({
@@ -25,7 +25,7 @@ function Swipeable({
 
   const swipeSize = useMemo(
     () => (actions.length >= 1 ? 80 + 95 * (actions.length - 1) : 200),
-    [actions]
+    [actions],
   );
 
   const swipeActions = useMemo(
@@ -58,7 +58,7 @@ function Swipeable({
       },
       ...customActions,
     }),
-    []
+    [],
   );
 
   function togleOpen() {

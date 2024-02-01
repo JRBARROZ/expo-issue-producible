@@ -2,10 +2,10 @@ import React, { useMemo } from "react";
 import { useController } from "react-hook-form";
 import { Text, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useTheme } from "styled-components";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import styles from "./styles";
 import { ErrorMessage, Label } from "../FieldUtilitaries";
-import useTheme from "../../../hooks/useTheme";
 
 function CheckboxField({
   name,

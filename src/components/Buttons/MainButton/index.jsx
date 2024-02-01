@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
-import useTheme from "../../../hooks/useTheme";
+import { useTheme } from "styled-components";
 import Icon from "../../Icon";
 import styles from "./styles";
 import { SpinnerLoading } from "../../Loading";
@@ -26,13 +26,13 @@ function MainButton({
     isOutlined && colorScheme
       ? theme.colors[colorScheme][500]
       : isOutlined
-      ? theme.colors.secondary[500]
-      : theme.colors.secondary[0];
+        ? theme.colors.secondary[500]
+        : theme.colors.secondary[0];
   const backgroundColor = isOutlined
     ? "transparent"
     : colorScheme
-    ? theme.colors[colorScheme][500]
-    : theme.colors.primary[200];
+      ? theme.colors[colorScheme][500]
+      : theme.colors.primary[200];
 
   return (
     <TouchableOpacity

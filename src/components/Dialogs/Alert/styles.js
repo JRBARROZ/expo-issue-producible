@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-import useTheme from "../../../hooks/useTheme";
+import { useTheme } from "styled-components";
 
 const styles = () => {
   const theme = useTheme();

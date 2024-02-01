@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useTheme } from "styled-components";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import { IconButton } from "../../Buttons";
 import { Icon } from "../..";
 import styles from "./styles";
-import useTheme from "../../../hooks/useTheme";
 
 function FlexibleCard({
   data,
@@ -96,7 +96,7 @@ function FlexibleCard({
               style={{ backgroundColor: cardSettings.color }}
             />
           </View>
-        ) : null
+        ) : null,
       )}
     </TouchableOpacity>
   );

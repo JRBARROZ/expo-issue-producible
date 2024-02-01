@@ -2,10 +2,10 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useController } from "react-hook-form";
 import { TextInput, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useTheme } from "styled-components";
 import { formatWithMask } from "../../../utils/mask";
 import styles from "./styles";
 import { ErrorMessage, Label } from "../FieldUtilitaries";
-import useTheme from "../../../hooks/useTheme";
 import { IconButton } from "../../Buttons";
 
 function TextField({

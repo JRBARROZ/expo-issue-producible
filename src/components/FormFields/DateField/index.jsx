@@ -4,8 +4,8 @@ import { useController } from "react-hook-form";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { Keyboard } from "react-native";
+import { useTheme } from "styled-components";
 import TextField from "../TextField";
-import useTheme from "../../../hooks/useTheme";
 
 function DateField({
   name,

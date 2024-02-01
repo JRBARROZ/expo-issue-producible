@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, View, Text } from "react-native";
+import { useTheme } from "styled-components";
 import styles from "./styles";
-import useTheme from "../../../hooks/useTheme";
 import Icon from "../../Icon";
 
 function MenuButton({ text, icon, iconName, onPress, disabled, style }) {

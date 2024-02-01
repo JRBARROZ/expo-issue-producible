@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useController } from "react-hook-form";
 import { Keyboard, Pressable, Text, View } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTheme } from "styled-components";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import TextField from "../TextField";
-import useTheme from "../../../hooks/useTheme";
 import { FlatList } from "../../Lists";
 import styles from "./styles";
 import { IconButton } from "../../Buttons";
@@ -56,7 +56,7 @@ function AutoCompleteField({
       setTextValue(accessObjectByString(field.value, optionLabelKey));
     } else if (optionValueKey && value === undefined && !multiple) {
       const findedOption = filteredOptions.find(
-        (item) => accessObjectByString(item, optionValueKey) === field.value
+        (item) => accessObjectByString(item, optionValueKey) === field.value,
       );
       setTextValue(accessObjectByString(findedOption, optionLabelKey));
     } else if (!field.value && textValue) {
@@ -75,7 +75,7 @@ function AutoCompleteField({
     if (newValue) {
       const regex = new RegExp(newValue, "i");
       const searchedOptions = options.filter((item) =>
-        regex.test(accessObjectByString(item, optionLabelKey))
+        regex.test(accessObjectByString(item, optionLabelKey)),
       );
       setFilteredOptions(searchedOptions);
     } else {
@@ -85,7 +85,6 @@ function AutoCompleteField({
 
     setTextValue(newValue);
     if (hasValue) field.onChange(null);
-
   }
 
   function handleChange(item) {
@@ -270,7 +269,7 @@ function AutoCompleteField({
 
             if (optionValueKey) {
               item = filteredOptions.find(
-                (item) => accessObjectByString(item, optionValueKey) === option
+                (item) => accessObjectByString(item, optionValueKey) === option,
               );
             }
 

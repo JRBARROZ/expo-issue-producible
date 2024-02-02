@@ -7,7 +7,6 @@ import {
   TextInputProps,
   ViewProps,
 } from "react-native";
-import { Icon } from "@expo/vector-icons/build/createIconSet";
 import { IIconButtonProps } from "@/components/Buttons/IconButton/types";
 import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
@@ -16,7 +15,7 @@ type IInputIcon<T extends ExpoVectorIcon = ExpoVectorIcon> = Omit<
   "style" | "activeOpacity" | "size"
 >;
 
-interface ITextFieldProps<T extends ExpoVectorIcon = ExpoVectorIcon> {
+interface ITextFieldProps<L extends ExpoVectorIcon = ExpoVectorIcon, R extends ExpoVectorIcon = L> {
   name?: string;
   value?: string;
   control?: Control<any, any>;
@@ -28,8 +27,8 @@ interface ITextFieldProps<T extends ExpoVectorIcon = ExpoVectorIcon> {
   errorMessage?: string;
   showErrorMessage?: boolean;
   selectionColor?: ColorValue;
-  leftIcon?: IInputIcon<T>;
-  rightIcon?: IInputIcon<T>;
+  leftIcon?: IInputIcon<L>;
+  rightIcon?: IInputIcon<R>;
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;

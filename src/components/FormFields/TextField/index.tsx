@@ -1,14 +1,12 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useController } from "react-hook-form";
-import { TextInput, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 import { formatWithMask } from "../../../utils/mask";
-import styles from "./styles";
+import { InputContainer, InputIconButton, TextInput } from "./styles";
 import { ErrorMessage, Label } from "../FieldUtilitaries";
-import { IconButton } from "../../Buttons";
 import { ITextFieldProps } from "./types";
-import { ExpoVectorIcon, IconWithName } from "@/types/ExpoVectorIcons";
+import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
 const defaultController: any = {
   field: {},
@@ -17,7 +15,7 @@ const defaultController: any = {
   },
 };
 
-function TextField<T extends IconWithName = ExpoVectorIcon>({
+function TextField<L extends ExpoVectorIcon = ExpoVectorIcon, R extends ExpoVectorIcon = L>({
   name,
   value,
   control,
@@ -41,9 +39,8 @@ function TextField<T extends IconWithName = ExpoVectorIcon>({
   onBlur,
   onEndEditing,
   onFocus,
-}: ITextFieldProps<T>) {
+}: ITextFieldProps<L, R>) {
   const theme = useTheme();
-  const textFieldStyles = styles();
   const [focused, setFocused] = useState(false);
   const [visibility, setVisibility] = useState(() => (password ? "visibility" : "visibility-off"));
 
@@ -61,43 +58,27 @@ function TextField<T extends IconWithName = ExpoVectorIcon>({
     setVisibility((visibility) => (visibility === "visibility" ? "visibility-off" : "visibility"));
   }, []);
 
-  const textAreaStyles = useMemo(() => {
-    if (!textArea) return;
-
-    const initialHeight = 20;
-    const height = numberOfLines ? numberOfLines * initialHeight : 10 * initialHeight;
-
-    return {
-      ...textFieldStyles.textArea,
-      height,
-    };
-  }, [textArea, numberOfLines]);
-
   return (
-    <View {...containerProps} style={[textFieldStyles.container, containerProps?.style]}>
+    <InputContainer {...containerProps}>
       <Label error={error} disabled={disabled} required={required}>
         {label}
       </Label>
       <TextInput
         multiline={textArea}
         {...inputProps}
-        numberOfLines={textArea ? 10 : undefined}
-        style={[
-          textFieldStyles.input,
-          textAreaStyles,
-          inputProps?.style,
-          leftIcon && textFieldStyles.inputWithLeftIcon,
-          (rightIcon || password) && textFieldStyles.inputWithRightIcon,
-          focused && textFieldStyles.focus,
-          disabled && textFieldStyles.disabled,
-          error && textFieldStyles.error,
-        ]}
+        numberOfLines={numberOfLines}
         value={value || field.value}
         placeholder={placeholder}
-        placeholderTextColor={theme.colors.secondary[400]}
-        selectionColor={selectionColor || theme.colors.primary[0]}
+        placeholderTextColor={theme.colors.secondary?.[400]}
+        selectionColor={selectionColor || theme.colors.primary?.[0]}
         editable={!disabled}
+        focused={focused}
+        error={!!error}
         secureTextEntry={visibility === "visibility"}
+        leftIcon={leftIcon as any}
+        rightIcon={leftIcon as any}
+        password={password}
+        textArea={textArea}
         onEndEditing={onEndEditing}
         onChangeText={(value) => {
           let newValue = value;
@@ -139,29 +120,31 @@ function TextField<T extends IconWithName = ExpoVectorIcon>({
         }}
       />
       {leftIcon && (
-        <IconButton
-          style={[textFieldStyles.leftIcon, showErrorMessage && error && { bottom: 34 }]}
+        <InputIconButton
+          error={showErrorMessage && error}
+          direction="left"
           name={leftIcon.name}
           icon={leftIcon.icon}
-          color={leftIcon.color}
+          color={leftIcon.color ?? theme.colors.primary?.[200]}
           size={24}
           activeOpacity={leftIcon.onPress ? 0.7 : 1}
           onPress={leftIcon.onPress}
         />
       )}
       {(rightIcon || password) && (
-        <IconButton
-          style={[textFieldStyles.rightIcon, showErrorMessage && error && { bottom: 34 }]}
+        <InputIconButton
+          error={!!(showErrorMessage && error)}
+          direction="right"
           name={password ? visibility : rightIcon!.name}
-          icon={password ? MaterialIcons : rightIcon!.icon}
-          color={rightIcon?.color || theme.colors.primary[200]}
+          icon={password ? (MaterialIcons as any) : rightIcon!.icon}
+          color={rightIcon?.color ?? theme.colors.primary?.[200]}
           size={24}
           activeOpacity={rightIcon?.onPress ? 0.7 : 1}
           onPress={password ? toggleVisibility : rightIcon!.onPress}
         />
       )}
       <ErrorMessage>{showErrorMessage ? error : null}</ErrorMessage>
-    </View>
+    </InputContainer>
   );
 }
 

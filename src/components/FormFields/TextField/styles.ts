@@ -1,54 +1,55 @@
-import { StyleSheet } from "react-native";
-import { useTheme } from "styled-components";
+import styled from "styled-components/native";
+import { ITextFieldProps } from "./types";
+import { IconButton } from "@/components/Buttons";
 
-const styles = () => {
-  const theme = useTheme();
+const InputContainer = styled.View`
+  row-gap: 6px;
+  position: relative;
+`;
 
-  return StyleSheet.create({
-    container: {
-      rowGap: 6,
-      position: "relative",
-    },
-    input: {
-      height: 64,
-      paddingHorizontal: 12,
-      borderWidth: 1.5,
-      borderColor: theme.colors.secondary[300],
-      borderRadius: theme.shape.borderRadius,
-      color: theme.colors.text[600],
-      fontFamily: theme.typography.fonts.primary.medium,
-      backgroundColor: theme.colors.secondary[100],
-    },
-    textArea: {
-      paddingVertical: 12,
-      textAlignVertical: "top",
-    },
-    inputWithLeftIcon: {
-      paddingLeft: 46,
-    },
-    inputWithRightIcon: {
-      paddingRight: 46,
-    },
-    focus: {
-      borderColor: theme.colors.primary[200],
-    },
-    disabled: {
-      opacity: theme.shape.opacity,
-    },
-    error: {
-      borderColor: theme.colors.error[400],
-    },
-    leftIcon: {
-      position: "absolute",
-      bottom: 18,
-      left: 6,
-    },
-    rightIcon: {
-      position: "absolute",
-      bottom: 18,
-      right: 6,
-    },
-  });
-};
+interface ITextInputProps
+  extends Pick<ITextFieldProps, "leftIcon" | "rightIcon" | "password" | "textArea"> {
+  focused: boolean;
+  error: boolean;
+}
 
-export default styles;
+const TextInput = styled.TextInput<ITextInputProps>`
+  height: ${({ textArea, numberOfLines }) => {
+    if (!textArea) return "64px";
+
+    const initialHeight = 20;
+    const height = numberOfLines ? numberOfLines * initialHeight : 10 * initialHeight;
+
+    return height + "px";
+  }};
+  padding: ${({ textArea }) => (textArea ? "12px" : "0 12px")};
+  padding-left: ${({ leftIcon }) => (leftIcon ? "46px" : "initial")};
+  padding-right: ${({ rightIcon }) => (rightIcon ? "46px" : "initial")};
+  border-width: 1.5px;
+  border-color: ${({ theme, focused, error }) => {
+    if (error) return theme.colors.error?.[400];
+
+    if (focused) return theme.colors.primary?.[200];
+
+    return theme.colors.secondary?.[300];
+  }};
+  border-radius: ${({ theme }) => theme.shape.borderRadius + "px"};
+  color: ${({ theme }) => theme.colors.text?.[600]};
+  font-family: ${({ theme }) => theme.typography.fonts.primary.medium};
+  background-color: ${({ theme }) => theme.colors.secondary?.[100]};
+  opacity: ${({ theme, editable }) => (editable ? theme.shape.opacity : 1)};
+`;
+
+interface IInputIconProps {
+  error: boolean;
+  direction: "left" | "right";
+}
+
+const InputIconButton = styled(IconButton)<IInputIconProps>`
+  position: absolute;
+  right: ${({ direction }) => (direction === "right" ? "6px" : "initial")};
+  left: ${({ direction }) => (direction === "left" ? "6px" : "initial")};
+  bottom: ${({ error }) => (error ? "34px" : "17px")};
+`;
+
+export { InputContainer, TextInput, InputIconButton };

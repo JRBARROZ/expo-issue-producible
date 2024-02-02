@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { Keyboard } from "react-native";
 import { useTheme } from "styled-components";
 import TextField from "../TextField";
+import { IDateFieldProps, IDateIcons } from "./types";
 
 function DateField({
   name,
@@ -21,7 +22,7 @@ function DateField({
   customOnChange,
   inputProps,
   containerProps,
-}) {
+}: IDateFieldProps) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
@@ -37,14 +38,14 @@ function DateField({
     field,
     formState: { errors },
   } = useController({ name, control });
-  const error = errors[field.name]?.message;
+  const error = errors[field.name]?.message as string | undefined;
 
   const formats = {
     date: "dd/MM/yyyy",
     time: "hh:mm",
   };
 
-  const icons = {
+  const icons: IDateIcons = {
     date: "date-range",
     time: "access-time",
   };

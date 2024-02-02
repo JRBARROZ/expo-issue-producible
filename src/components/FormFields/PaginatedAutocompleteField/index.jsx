@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 import { useQuery } from "react-query";
 import accessObjectByString from "../../../utils/accessObjectByString";
-import AutoCompleteField from "../AutoCompleteField";
+import AutoCompleteField from "../AutocompleteField";
 import { useDebounceCallback } from "../../../hooks";
 
 function PaginatedAutoCompleteField({
@@ -63,7 +63,7 @@ function PaginatedAutoCompleteField({
       onError() {
         setOptions([]);
       },
-    }
+    },
   );
 
   useEffect(() => {
@@ -71,7 +71,7 @@ function PaginatedAutoCompleteField({
       setTextValue(accessObjectByString(field.value, optionLabelKey));
     } else if (optionValueKey && !multiple) {
       const findedOption = options.find(
-        (item) => accessObjectByString(item, optionValueKey) === field.value
+        (item) => accessObjectByString(item, optionValueKey) === field.value,
       );
       setTextValue(accessObjectByString(findedOption, optionLabelKey));
     } else if (!field.value && textValue) {

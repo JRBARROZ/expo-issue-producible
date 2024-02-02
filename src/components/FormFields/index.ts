@@ -1,6 +1,6 @@
 import TextField from "./TextField";
-import AutoCompleteField from "./AutoCompleteField";
-import PaginatedAutoCompleteField from "./PaginatedAutoCompleteField";
+import AutocompleteField from "./AutocompleteField";
+import PaginatedAutocompleteField from "./PaginatedAutocompleteField";
 import RadioField from "./RadioField";
 import CheckboxField from "./CheckboxField";
 import DateField from "./DateField";
@@ -10,12 +10,12 @@ import SliderField from "./SliderField";
 
 export {
   TextField,
-  AutoCompleteField,
+  AutocompleteField,
   RadioField,
   CheckboxField,
   DateField,
   SelectField,
   SwitchField,
-  PaginatedAutoCompleteField,
+  PaginatedAutocompleteField,
   SliderField,
 };

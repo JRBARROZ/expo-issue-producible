@@ -1,12 +1,14 @@
-import { TextField } from "@/components/FormFields";
+import { DateField, TextField } from "@/components/FormFields";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { format } from "date-fns";
 
 export default function Index() {
   const { control, watch } = useForm({
     defaultValues: {
       text: "",
+      date: new Date(),
     },
   });
 
@@ -38,7 +40,7 @@ export default function Index() {
             >
               {key}:{" "}
             </Text>
-            {value}
+            {value instanceof Date ? format(value, "dd/MM/yyyy") : value}
           </Text>
         ))}
       </View>
@@ -56,6 +58,8 @@ export default function Index() {
           icon: MaterialIcons,
         }}
       />
+
+      <DateField label="DateField" name="date" control={control} />
     </View>
   );
 }

@@ -56,10 +56,10 @@ function SelectField({
     field,
     formState: { errors },
   } = useController({ name, control });
-  const error = errors[field.name]?.message;
+  const error = errors[field.name]?.message as string | undefined;
 
   const [open, setOpen] = useState(false);
-  const [textValue, setTextValue] = useState(null);
+  const [textValue, setTextValue] = useState<string | undefined>();
 
   useEffect(() => {
     if (field.value instanceof Object) {

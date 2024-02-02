@@ -1,4 +1,4 @@
-import React, { ForwardedRef, Ref, forwardRef, useCallback, useState } from "react";
+import React, { ForwardedRef, forwardRef, useCallback, useState } from "react";
 import { IconButtonContainer } from "./styles";
 import { IIconButtonProps } from "./types";
 import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";

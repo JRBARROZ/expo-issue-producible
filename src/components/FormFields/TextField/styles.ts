@@ -23,8 +23,8 @@ const TextInput = styled.TextInput<ITextInputProps>`
     return height + "px";
   }};
   padding: ${({ textArea }) => (textArea ? "12px" : "0 12px")};
-  padding-left: ${({ leftIcon }) => (leftIcon ? "46px" : "initial")};
-  padding-right: ${({ rightIcon }) => (rightIcon ? "46px" : "initial")};
+  padding-left: ${({ leftIcon }) => (leftIcon ? "46px" : "12px")};
+  padding-right: ${({ rightIcon }) => (rightIcon ? "46px" : "12px")};
   border-width: 1.5px;
   border-color: ${({ theme, focused, error }) => {
     if (error) return theme.colors.error?.[400];

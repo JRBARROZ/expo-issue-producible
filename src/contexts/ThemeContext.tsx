@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useCallback, useState } from "react";
 import theme from "@/global/theme";
 import { IMode } from "@/global/theme/types";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components/native";
 
 interface IThemeContextProps {
   mode: IMode;

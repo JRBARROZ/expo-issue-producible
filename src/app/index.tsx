@@ -2,8 +2,6 @@ import { TextField } from "@/components/FormFields";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { IconProps } from "@expo/vector-icons/build/createIconSet";
-import { IconButton } from "@/components/Buttons";
 
 export default function Index() {
   const { control, watch } = useForm({
@@ -18,6 +16,7 @@ export default function Index() {
     <View
       style={{
         padding: 12,
+        paddingTop: 50,
         rowGap: 4,
       }}
     >
@@ -44,12 +43,14 @@ export default function Index() {
         ))}
       </View>
 
-      <IconButton<typeof MaterialIcons> icon={MaterialIcons} name="10k" />
-
-      <TextField<typeof MaterialIcons>
+      <TextField<typeof MaterialIcons, typeof Ionicons>
         label="TextField"
         name="text"
         control={control}
+        rightIcon={{
+          name: "add-circle",
+          icon: Ionicons,
+        }}
         leftIcon={{
           name: "accessibility-new",
           icon: MaterialIcons,

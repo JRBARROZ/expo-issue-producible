@@ -22,11 +22,11 @@ interface IColors {
 
 interface ITypography {
   size: {
-    body?: number;
+    body: number;
     caption: number;
-    title?: number;
-    medium?: number;
-    regular?: number;
+    title: number;
+    medium: number;
+    regular: number;
   };
   fonts: {
     primary: {

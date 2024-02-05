@@ -9,7 +9,6 @@ import accessObjectByString from "../../../utils/accessObjectByString";
 import { SpinnerLoading } from "../../Loading";
 import { IBottomSheetListProps } from "./types";
 import EmptyComponent from "@/components/EmptyComponent";
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
 function BottomSheetListComponent<T extends Record<string, any> = any>(
   {

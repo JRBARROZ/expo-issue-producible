@@ -86,10 +86,14 @@ function SelectField<T extends Record<string, any> = any>({
       return accessObjectByString(item, optionValueKey) === field.value;
     }
 
-    return (
-      accessObjectByString(field.value, optionIdentifier) ===
-      accessObjectByString(item, optionIdentifier)
-    );
+    if (field.value instanceof Object) {
+      return (
+        accessObjectByString(field.value, optionIdentifier) ===
+        accessObjectByString(item, optionIdentifier)
+      );
+    }
+
+    return false;
   }
 
   return (

@@ -9,11 +9,18 @@ interface IOption {
   label: string;
 }
 
+interface IFormValues {
+  text: string;
+  date: Date;
+  select: IOption | null;
+}
+
 export default function Index() {
-  const { control, watch } = useForm({
+  const { control, watch } = useForm<IFormValues>({
     defaultValues: {
       text: "",
       date: new Date(),
+      select: null,
     },
   });
 
@@ -45,7 +52,11 @@ export default function Index() {
             >
               {key}:{" "}
             </Text>
-            {value instanceof Date ? format(value, "dd/MM/yyyy") : value}
+            {value instanceof Date
+              ? format(value, "dd/MM/yyyy")
+              : value?.label
+                ? value.label
+                : value}
           </Text>
         ))}
       </View>
@@ -67,7 +78,7 @@ export default function Index() {
       <DateField label="DateField" name="date" control={control} />
 
       <SelectField<IOption>
-        label="Selected"
+        label="Select"
         name="select"
         control={control}
         options={[

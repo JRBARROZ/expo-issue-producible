@@ -20,7 +20,7 @@ interface ISelectFieldProps<T> {
   disabled?: boolean;
   inputProps?: TextInputProps;
   containerProps?: ViewProps;
-  listProps?: IFlatlisProps<T>;
+  listProps?: Omit<IFlatlisProps<T>, "data" | "renderItem">;
   loading?: boolean;
   onChange?(value: T | any): void;
   customOnChange?(value: T | any): void;

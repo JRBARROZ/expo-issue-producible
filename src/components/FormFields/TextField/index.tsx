@@ -66,6 +66,12 @@ function TextField<L extends ExpoVectorIcon = ExpoVectorIcon, R extends ExpoVect
       <TextInput
         multiline={textArea}
         {...inputProps}
+        style={[
+          {
+            verticalAlign: "top",
+          },
+          inputProps?.style,
+        ]}
         numberOfLines={numberOfLines}
         value={value || field.value}
         placeholder={placeholder}

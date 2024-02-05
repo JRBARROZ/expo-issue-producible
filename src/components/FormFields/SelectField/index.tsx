@@ -1,22 +1,23 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useController } from "react-hook-form";
-import { Dimensions, Keyboard, Pressable, Text } from "react-native";
+import { Dimensions, Keyboard } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useBottomSheetDynamicSnapPoints } from "@gorhom/bottom-sheet";
 import { useTheme } from "styled-components";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import TextField from "../TextField";
-import styles from "./styles";
 import { BottomSheetList } from "../../BottomSheets";
 import { useBottomSheet } from "../../../hooks";
+import { ISelectFieldProps } from "./types";
+import { InputOption } from "../FieldUtilitaries";
 
-function SelectField({
+function SelectField<T extends Record<string, any> = any>({
   name,
   label,
   control,
   options = [],
   optionKeyExtractor,
-  optionLabelKey = "label",
+  optionLabelKey,
   optionValueKey,
   optionCompareKey,
   emptyMessage,
@@ -31,9 +32,8 @@ function SelectField({
   customOnChange,
   onFocus,
   onBlur,
-}) {
+}: ISelectFieldProps<T>) {
   const theme = useTheme();
-  const autocompleteStyles = styles();
   const optionIdentifier = useMemo(() => {
     return optionCompareKey || optionLabelKey;
   }, [optionCompareKey, optionLabelKey]);
@@ -68,11 +68,12 @@ function SelectField({
       const findedOption = options.find(
         (item) => accessObjectByString(item, optionValueKey) === field.value,
       );
-      setTextValue(accessObjectByString(findedOption, optionLabelKey));
+
+      if (findedOption) setTextValue(accessObjectByString(findedOption, optionLabelKey));
     }
   }, [field.value, optionLabelKey]);
 
-  function handleChange(item) {
+  function handleChange(item: T) {
     field.onChange(item);
 
     if (customOnChange instanceof Function) {
@@ -80,7 +81,7 @@ function SelectField({
     }
   }
 
-  function verifySelectedOptions(item) {
+  function verifySelectedOptions(item: T) {
     if (optionValueKey) {
       return accessObjectByString(item, optionValueKey) === field.value;
     }
@@ -127,17 +128,15 @@ function SelectField({
       <BottomSheetList
         ref={ref}
         index={0}
-        snapPoints={animatedSnapPoints}
+        snapPoints={animatedSnapPoints.value}
         handleHeight={animatedHandleHeight}
         contentHeight={animatedContentHeight}
-        waitFor
-        simultaneousHandlers
-        onClose={(event) => {
+        onClose={() => {
           setOpen(false);
           Keyboard.dismiss();
 
           if (onBlur instanceof Function) {
-            onBlur(event);
+            onBlur();
           }
         }}
         onOpen={() => setOpen(true)}
@@ -152,7 +151,8 @@ function SelectField({
           keyExtractor: (item, index) =>
             optionKeyExtractor ? accessObjectByString(item, optionKeyExtractor) : index,
           renderItem: ({ item }) => (
-            <Pressable
+            <InputOption
+              selected={verifySelectedOptions(item as T)}
               onPress={() => {
                 const value = optionValueKey ? accessObjectByString(item, optionValueKey) : item;
 
@@ -164,19 +164,9 @@ function SelectField({
 
                 handleClose();
               }}
-              style={[
-                autocompleteStyles.optionContainer,
-                {
-                  backgroundColor: verifySelectedOptions(item)
-                    ? theme.colors.primary[0]
-                    : theme.colors.secondary[0],
-                },
-              ]}
             >
-              <Text style={autocompleteStyles.optionLabel}>
-                {accessObjectByString(item, optionLabelKey)}
-              </Text>
-            </Pressable>
+              {accessObjectByString(item, optionLabelKey)}
+            </InputOption>
           ),
         }}
       />

@@ -1,14 +1,18 @@
-import React, { ForwardedRef, forwardRef, useRef } from "react";
-import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
-import { Pressable, Text } from "react-native";
-import styles from "./styles";
+import React, { MutableRefObject, Ref, forwardRef, useRef } from "react";
+import {
+  BottomSheetBackdropProps,
+  BottomSheetFlatList,
+  BottomSheetModal,
+} from "@gorhom/bottom-sheet";
+import styles, { Backdrop } from "./styles";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import { SpinnerLoading } from "../../Loading";
 import { IBottomSheetListProps } from "./types";
+import EmptyComponent from "@/components/EmptyComponent";
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
-const BottomSheetList = forwardRef(function <T>(
+function BottomSheetListComponent<T extends Record<string, any> = any>(
   {
-    children,
     index = 0,
     snapPoints = [20, "25%", "50%", "75%", "95%"],
     enableBackdropInteractions = false,
@@ -20,16 +24,13 @@ const BottomSheetList = forwardRef(function <T>(
     onClose,
     ...props
   }: IBottomSheetListProps<T>,
-  ref: ForwardedRef<any>,
+  ref: any,
 ) {
   const bottomSheetListStyles = styles();
   const firstRender = useRef(true);
 
-  const CustomBackDrop = React.memo(({ style }) => (
-    <Pressable
-      style={[style, bottomSheetListStyles.backdrop, backDropStyle]}
-      onPress={() => ref.current.dismiss()}
-    />
+  const CustomBackDrop = React.memo(({ style }: BottomSheetBackdropProps) => (
+    <Backdrop style={[style, backDropStyle]} onPress={() => ref.current.dismiss()} />
   ));
 
   return (
@@ -63,26 +64,34 @@ const BottomSheetList = forwardRef(function <T>(
           bottomSheetListStyles.contentContainer,
           flatListProps?.contentContainerStyle,
         ]}
-        keyExtractor={(item, index) =>
-          flatListProps?.itemKeyExtractor
-            ? accessObjectByString(item, flatListProps.itemKeyExtractor)
-            : index
-        }
+        keyExtractor={(item, index) => {
+          if (typeof flatListProps?.itemKeyExtractor === "string") {
+            return accessObjectByString(item, flatListProps.itemKeyExtractor);
+          }
+
+          return index;
+        }}
         ListFooterComponent={
-          flatListProps?.loading ? <SpinnerLoading /> : flatListProps?.listFooterComponent
+          flatListProps?.loading ? <SpinnerLoading /> : flatListProps?.ListFooterComponent
         }
         ListEmptyComponent={
           !flatListProps?.loading
             ? flatListProps?.ListEmptyComponent || (
-                <Text style={bottomSheetListStyles.emptyMessage}>
-                  {flatListProps?.emptyMessage || "Nenhum item encontrado"}
-                </Text>
+                <EmptyComponent
+                  emptyMessage={flatListProps?.emptyMessage || "Nenhum item encontrado"}
+                />
               )
             : null
         }
       />
     </BottomSheetModal>
   );
-});
+}
+
+type IBottomSheetListAssertion = <T extends Record<string, any> = any>(
+  props: IBottomSheetListProps<T> & { ref?: any },
+) => ReturnType<typeof BottomSheetListComponent>;
+
+const BottomSheetList = forwardRef(BottomSheetListComponent) as IBottomSheetListAssertion;
 
 export default BottomSheetList;

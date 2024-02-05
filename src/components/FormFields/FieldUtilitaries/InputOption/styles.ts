@@ -5,7 +5,7 @@ interface IInputOptionContainer {
 }
 
 const InputOptionContainer = styled.Pressable<IInputOptionContainer>`
-  padding: ${({ theme }) => theme.shape.padding};
+  padding: ${({ theme }) => theme.shape.padding + "px"};
   border-bottom: 1px;
   border-color: ${({ theme }) => theme.colors.secondary?.[200]};
   background-color: ${({ theme, selected }) => (selected ? theme.colors.primary?.[0] : theme.colors.secondary?.[0])};
@@ -13,7 +13,7 @@ const InputOptionContainer = styled.Pressable<IInputOptionContainer>`
 
 const InputOptionLabel = styled.Text`
   font-family: ${({ theme }) => theme.typography.fonts.primary.medium};
-  font-size: ${({ theme }) => theme.typography.size.body};
+  font-size: ${({ theme }) => theme.typography.size.body + "px"};
   color: ${({ theme }) => theme.colors.secondary?.[600]};
 `;
 

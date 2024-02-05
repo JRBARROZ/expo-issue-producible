@@ -67,7 +67,7 @@ function TextField<L extends ExpoVectorIcon = ExpoVectorIcon, R extends ExpoVect
         multiline={textArea}
         {...inputProps}
         style={[
-          {
+          textArea && {
             verticalAlign: "top",
           },
           inputProps?.style,

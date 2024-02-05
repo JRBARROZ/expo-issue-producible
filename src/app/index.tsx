@@ -1,8 +1,13 @@
-import { DateField, TextField } from "@/components/FormFields";
+import { DateField, SelectField, TextField } from "@/components/FormFields";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
+
+interface IOption {
+  id: number;
+  label: string;
+}
 
 export default function Index() {
   const { control, watch } = useForm({
@@ -60,6 +65,28 @@ export default function Index() {
       />
 
       <DateField label="DateField" name="date" control={control} />
+
+      <SelectField<IOption>
+        label="Selected"
+        name="select"
+        control={control}
+        options={[
+          {
+            id: 1,
+            label: "Option 1",
+          },
+          {
+            id: 2,
+            label: "Option 2",
+          },
+          {
+            id: 3,
+            label: "Option 3",
+          },
+        ]}
+        optionLabelKey="label"
+        optionCompareKey="id"
+      />
     </View>
   );
 }

@@ -1,5 +1,5 @@
 import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
-import { GestureResponderEvent } from "react-native";
+import { GestureResponderEvent, StyleProp, ViewStyle } from "react-native";
 
 interface IIconButtonProps<T extends ExpoVectorIcon = ExpoVectorIcon> {
   name: keyof T["glyphMap"];
@@ -7,7 +7,7 @@ interface IIconButtonProps<T extends ExpoVectorIcon = ExpoVectorIcon> {
   color?: string;
   size?: number;
   activeOpacity?: number;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   onPress?(event: GestureResponderEvent): void;
 }
 

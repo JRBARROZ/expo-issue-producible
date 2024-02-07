@@ -10,7 +10,7 @@ import { SpinnerLoading } from "../../Loading";
 import { IBottomSheetListProps } from "./types";
 import EmptyComponent from "@/components/EmptyComponent";
 
-function BottomSheetListComponent<T extends Record<string, any> = any>(
+function BottomSheetListComponent<T extends Record<string, any>>(
   {
     index = 0,
     snapPoints = [20, "25%", "50%", "75%", "95%"],
@@ -87,7 +87,7 @@ function BottomSheetListComponent<T extends Record<string, any> = any>(
   );
 }
 
-type IBottomSheetListAssertion = <T extends Record<string, any> = any>(
+type IBottomSheetListAssertion = <T extends Record<string, any>>(
   props: IBottomSheetListProps<T> & { ref?: any },
 ) => ReturnType<typeof BottomSheetListComponent>;
 

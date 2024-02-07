@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
+import AutoCompleteField from "@/components/FormFields/AutocompleteField";
+import { ScrollView } from "react-native-gesture-handler";
+import PaginatedAutoCompleteField from "@/components/FormFields/PaginatedAutocompleteField";
 
 interface IOption {
   id: number;
@@ -13,6 +16,40 @@ interface IFormValues {
   text: string;
   date: Date;
   select: IOption | null;
+  autocomplete: IOption | null;
+  paginated_autocomplete: IOption | null;
+}
+
+interface IGetOptionsParams {
+  page: number;
+  limit: number;
+  label?: string;
+}
+const options: IOption[] = Array.from({ length: 30 }, (_, index) => ({
+  id: index + 1,
+  label: `Option ${index + 1}`,
+}));
+
+async function getOptions({ page, limit, label }: IGetOptionsParams) {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  let newOptions = options;
+
+  if (label) {
+    const regex = new RegExp(label, "i");
+
+    newOptions = options.filter((option) => {
+      return regex.test(option.label);
+    });
+  }
+
+  const optionsPage = page * limit;
+  const optionsLimit = optionsPage + limit;
+
+  return {
+    total: Math.floor(newOptions.length / limit),
+    items: newOptions.slice(optionsPage, optionsLimit),
+  };
 }
 
 export default function Index() {
@@ -21,13 +58,15 @@ export default function Index() {
       text: "",
       date: new Date(),
       select: null,
+      autocomplete: null,
+      paginated_autocomplete: null,
     },
   });
 
   const values = watch();
 
   return (
-    <View
+    <ScrollView
       style={{
         padding: 12,
         paddingTop: 50,
@@ -77,27 +116,34 @@ export default function Index() {
 
       <DateField label="DateField" name="date" control={control} />
 
-      <SelectField<IOption>
+      <SelectField
         label="Select"
         name="select"
         control={control}
-        options={[
-          {
-            id: 1,
-            label: "Option 1",
-          },
-          {
-            id: 2,
-            label: "Option 2",
-          },
-          {
-            id: 3,
-            label: "Option 3",
-          },
-        ]}
+        options={options}
         optionLabelKey="label"
         optionCompareKey="id"
       />
-    </View>
+
+      <AutoCompleteField
+        label="Autocomplete"
+        name="autocomplete"
+        control={control}
+        options={options}
+        optionLabelKey="label"
+        optionCompareKey="id"
+      />
+
+      <PaginatedAutoCompleteField
+        label="PaginatedAutocomplete"
+        name="paginated_autocomplete"
+        control={control}
+        optionLabelKey="label"
+        optionCompareKey="id"
+        queryKey="paginated-autocomplete"
+        filterKey="label"
+        service={getOptions}
+      />
+    </ScrollView>
   );
 }

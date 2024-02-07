@@ -4,8 +4,9 @@ import { useQuery } from "react-query";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import AutoCompleteField from "../AutocompleteField";
 import { useDebounceCallback } from "../../../hooks";
+import { IPaginatedAutocomplete } from "./types";
 
-function PaginatedAutoCompleteField({
+function PaginatedAutoCompleteField<T extends Record<string, any>>({
   name,
   control,
   multiple,
@@ -30,20 +31,20 @@ function PaginatedAutoCompleteField({
   onChangeText,
   onFocus,
   onBlur,
-}) {
+}: IPaginatedAutocomplete<T>) {
   const { field } = useController({ name, control });
 
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState<T[]>([]);
   const [textValue, setTextValue] = useState(() => {
     return field.value ? accessObjectByString(field.value, optionLabelKey) : field.value;
   });
-  const [debouncedTextValue, setDebouncedTextValue] = useState(null);
+  const [debouncedTextValue, setDebouncedTextValue] = useState<string | null>(null);
 
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
 
   const serviceQuery = useQuery(
-    [queryKey, page, limit, debouncedTextValue, ...refetchService],
+    [queryKey, page, limit, debouncedTextValue, refetchService],
     () => {
       if (filterKey) return service({ page, limit, [filterKey]: debouncedTextValue });
       return service({ page, limit });
@@ -53,12 +54,8 @@ function PaginatedAutoCompleteField({
       refetchOnWindowFocus: false,
       enabled: !!queryKey,
       onSuccess(response) {
-        if (!!response?.items) {
-          setTotalPage(response.total);
-          setOptions((options) => [...options, ...response.items]);
-        } else {
-          setOptions((options) => [...options, ...response]);
-        }
+        setTotalPage(response.total);
+        setOptions((options) => [...options, ...response.items]);
       },
       onError() {
         setOptions([]);
@@ -73,13 +70,14 @@ function PaginatedAutoCompleteField({
       const findedOption = options.find(
         (item) => accessObjectByString(item, optionValueKey) === field.value,
       );
-      setTextValue(accessObjectByString(findedOption, optionLabelKey));
+
+      if (findedOption) setTextValue(accessObjectByString(findedOption, optionLabelKey));
     } else if (!field.value && textValue) {
       setTextValue(null);
     }
   }, [field.value, optionLabelKey]);
 
-  function handleFilter(value) {
+  function handleFilter(value: string | null) {
     if (queryKey) {
       if (page !== 0 || value !== debouncedTextValue) {
         setOptions([]);
@@ -93,7 +91,7 @@ function PaginatedAutoCompleteField({
   const debouncedHandleFilter = useDebounceCallback(handleFilter);
 
   return (
-    <AutoCompleteField
+    <AutoCompleteField<T>
       name={name}
       label={label}
       value={textValue}

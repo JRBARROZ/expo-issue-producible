@@ -17,7 +17,7 @@ type IInputIcon<T extends ExpoVectorIcon = ExpoVectorIcon> = Omit<
 
 interface ITextFieldProps<L extends ExpoVectorIcon = ExpoVectorIcon, R extends ExpoVectorIcon = L> {
   name?: string;
-  value?: string;
+  value?: string | number | null;
   control?: Control<any, any>;
   label?: string;
   textArea?: boolean;

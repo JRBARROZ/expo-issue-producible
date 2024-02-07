@@ -22,8 +22,8 @@ interface ISelectFieldProps<T> {
   containerProps?: ViewProps;
   listProps?: Omit<IFlatlisProps<T>, "data" | "renderItem">;
   loading?: boolean;
-  onChange?(value: T | any): void;
-  customOnChange?(value: T | any): void;
+  onChange?(value: unknown): void;
+  customOnChange?(value: unknown): void;
   onFocus?(event: NativeSyntheticEvent<TextInputFocusEventData>): void;
   onBlur?(): void;
 }

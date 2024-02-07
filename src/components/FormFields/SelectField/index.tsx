@@ -11,7 +11,7 @@ import { useBottomSheet } from "../../../hooks";
 import { ISelectFieldProps } from "./types";
 import { InputOption } from "../FieldUtilitaries";
 
-function SelectField<T extends Record<string, any> = any>({
+function SelectField<T extends Record<string, any>>({
   name,
   label,
   control,

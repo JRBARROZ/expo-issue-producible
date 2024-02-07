@@ -6,9 +6,10 @@ interface IInputOptionContainer {
 
 const InputOptionContainer = styled.Pressable<IInputOptionContainer>`
   padding: ${({ theme }) => theme.shape.padding + "px"};
-  border-bottom: 1px;
+  border-bottom-width: 1px;
+  border-style: solid;  
   border-color: ${({ theme }) => theme.colors.secondary?.[200]};
-  background-color: ${({ theme, selected }) => (selected ? theme.colors.primary?.[0] : theme.colors.secondary?.[0])};
+  background-color: ${({ theme, selected }) => (selected ? theme.colors.primary?.[0] : "transparent")};
 `;
 
 const InputOptionLabel = styled.Text`

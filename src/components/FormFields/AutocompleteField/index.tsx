@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useController } from "react-hook-form";
-import { Keyboard, Pressable, Text, View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import TextField from "../TextField";
-import { FlatList } from "../../Lists";
-import styles from "./styles";
+import { InputList, OptionTag, OptionTagContainer, OptionTagLabel } from "./styles";
 import { IconButton } from "../../Buttons";
+import { IAutocompleteProps } from "./types";
+import { InputOption } from "../FieldUtilitaries";
 
-function AutoCompleteField({
+function AutoCompleteField<T extends Record<string, any>>({
   value,
   name,
   label,
@@ -33,19 +34,18 @@ function AutoCompleteField({
   onChangeText,
   onFocus,
   onBlur,
-}) {
+}: IAutocompleteProps<T>) {
   const theme = useTheme();
-  const autocompleteStyles = styles();
 
   const {
     field,
     formState: { errors },
   } = useController({ name, control });
-  const error = errors[field.name]?.message;
+  const error = errors[field.name]?.message as string | undefined;
 
   const [open, setOpen] = useState(false);
-  const [filteredOptions, setFilteredOptions] = useState([]);
-  const [textValue, setTextValue] = useState(null);
+  const [filteredOptions, setFilteredOptions] = useState<T[]>([]);
+  const [textValue, setTextValue] = useState<string | null>(null);
   const choosedListItemRef = useRef(false);
   const optionIdentifier = useMemo(() => {
     return optionCompareKey || optionLabelKey;
@@ -58,7 +58,8 @@ function AutoCompleteField({
       const findedOption = filteredOptions.find(
         (item) => accessObjectByString(item, optionValueKey) === field.value,
       );
-      setTextValue(accessObjectByString(findedOption, optionLabelKey));
+
+      if (findedOption) setTextValue(accessObjectByString(findedOption, optionLabelKey));
     } else if (!field.value && textValue) {
       setTextValue(null);
     }
@@ -68,7 +69,7 @@ function AutoCompleteField({
     setFilteredOptions(options);
   }, [options]);
 
-  function filterOptionsByText(value) {
+  function filterOptionsByText(value: string) {
     const hasValue = field.value instanceof Object;
     const newValue =
       hasValue && textValue !== value ? (choosedListItemRef.current ? null : textValue) : value;
@@ -87,7 +88,7 @@ function AutoCompleteField({
     if (hasValue) field.onChange(null);
   }
 
-  function handleChange(item) {
+  function handleChange(item: T) {
     if (!multiple) {
       field.onChange(item);
 
@@ -135,24 +136,26 @@ function AutoCompleteField({
     }
   }
 
-  function handleRemoveOption(item) {
-    const filteredOptions = field.value.filter((option) => {
-      if (optionValueKey) {
-        return accessObjectByString(item, optionValueKey) !== option;
-      }
+  function handleRemoveOption(item: T) {
+    if (Array.isArray(field.value)) {
+      const filteredOptions = field.value.filter((option) => {
+        if (optionValueKey) {
+          return accessObjectByString(item, optionValueKey) !== option;
+        }
 
-      return (
-        accessObjectByString(option, optionIdentifier) !==
-        accessObjectByString(item, optionIdentifier)
-      );
-    });
+        return (
+          accessObjectByString(option, optionIdentifier) !==
+          accessObjectByString(item, optionIdentifier)
+        );
+      });
 
-    field.onChange(filteredOptions);
+      field.onChange(filteredOptions);
+    }
   }
 
-  function verifySelectedOptions(item) {
+  function verifySelectedOptions(item: T) {
     if (multiple) {
-      return field.value?.some((option) => {
+      return field.value?.some((option: any) => {
         if (optionValueKey) {
           return accessObjectByString(item, optionValueKey) === option;
         }
@@ -199,7 +202,7 @@ function AutoCompleteField({
         rightIcon={{
           name: open ? "arrow-drop-up" : "arrow-drop-down",
           icon: MaterialIcons,
-          color: theme.colors.primary[200],
+          color: theme.colors.primary?.[200],
         }}
         onFocus={(event) => {
           if (onFocus instanceof Function) {
@@ -223,19 +226,17 @@ function AutoCompleteField({
         }}
       />
       {open && (
-        <FlatList
+        <InputList
           {...listProps}
           data={filteredOptions}
           nestedScrollEnabled
           keyboardShouldPersistTaps="always"
-          style={[autocompleteStyles.listContainer, listProps?.style]}
           emptyMessage={emptyMessage}
           loading={loading}
-          keyExtractor={(item, index) =>
-            optionKeyExtractor ? accessObjectByString(item, optionKeyExtractor) : index
-          }
+          itemKeyExtractor={optionKeyExtractor}
           renderItem={({ item }) => (
-            <Pressable
+            <InputOption
+              selected={verifySelectedOptions(item)}
               onPress={() => {
                 const value = optionValueKey ? accessObjectByString(item, optionValueKey) : item;
                 handleChange(value);
@@ -246,53 +247,37 @@ function AutoCompleteField({
 
                 togleOpen();
               }}
-              style={[
-                autocompleteStyles.optionContainer,
-                {
-                  backgroundColor: verifySelectedOptions(item)
-                    ? theme.colors.primary[0]
-                    : theme.colors.secondary[100],
-                },
-              ]}
             >
-              <Text style={autocompleteStyles.optionLabel}>
-                {accessObjectByString(item, optionLabelKey)}
-              </Text>
-            </Pressable>
+              {accessObjectByString(item, optionLabelKey)}
+            </InputOption>
           )}
         />
       )}
       {multiple && !open && field.value?.length > 0 && (
-        <View style={autocompleteStyles.optionsContainer} space={2}>
-          {field.value.map((option) => {
-            let item = option;
+        <OptionTagContainer>
+          {field.value.map((option: any) => {
+            let item: T = option;
 
             if (optionValueKey) {
               item = filteredOptions.find(
                 (item) => accessObjectByString(item, optionValueKey) === option,
-              );
+              )!;
             }
 
             return (
-              <View
-                key={accessObjectByString(item, optionLabelKey)}
-                space={1}
-                style={autocompleteStyles.optionTag}
-              >
-                <Text style={autocompleteStyles.optionTagLabel}>
-                  {accessObjectByString(item, optionLabelKey)}
-                </Text>
+              <OptionTag key={accessObjectByString(item, optionLabelKey)}>
+                <OptionTagLabel>{accessObjectByString(item, optionLabelKey)}</OptionTagLabel>
                 <IconButton
                   name="close"
                   icon={MaterialCommunityIcons}
-                  color={theme.colors.primary[200]}
+                  color={theme.colors.primary?.[200]}
                   size={14}
                   onPress={() => handleRemoveOption(item)}
                 />
-              </View>
+              </OptionTag>
             );
           })}
-        </View>
+        </OptionTagContainer>
       )}
     </View>
   );

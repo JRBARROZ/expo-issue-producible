@@ -3,17 +3,15 @@ import { Control } from "react-hook-form";
 import { NativeSyntheticEvent, TextInputFocusEventData, TextInputProps } from "react-native";
 import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 
-type IKeyOfOptions<T> = keyof T & string;
-
 interface ISelectFieldProps<T> {
   name: string;
   label?: string;
   control: Control<any, any>;
   options: T[];
-  optionKeyExtractor?: IKeyOfOptions<T>;
-  optionLabelKey: IKeyOfOptions<T>;
-  optionValueKey?: IKeyOfOptions<T>;
-  optionCompareKey?: IKeyOfOptions<T>;
+  optionKeyExtractor?: string;
+  optionLabelKey: string;
+  optionValueKey?: string;
+  optionCompareKey?: string;
   emptyMessage?: string;
   placeholder?: string;
   required?: boolean;
@@ -28,4 +26,4 @@ interface ISelectFieldProps<T> {
   onBlur?(): void;
 }
 
-export { ISelectFieldProps, IKeyOfOptions };
+export { ISelectFieldProps };

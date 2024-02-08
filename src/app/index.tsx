@@ -1,4 +1,10 @@
-import { DateField, SelectField, TextField } from "@/components/FormFields";
+import {
+  CheckboxField,
+  DateField,
+  RadioField,
+  SelectField,
+  TextField,
+} from "@/components/FormFields";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
@@ -18,6 +24,8 @@ interface IFormValues {
   select: IOption | null;
   autocomplete: IOption | null;
   paginated_autocomplete: IOption | null;
+  checkbox: IOption["label"][];
+  radio: string | null;
 }
 
 interface IGetOptionsParams {
@@ -60,6 +68,8 @@ export default function Index() {
       select: null,
       autocomplete: null,
       paginated_autocomplete: null,
+      checkbox: [],
+      radio: null,
     },
   });
 
@@ -70,7 +80,7 @@ export default function Index() {
       style={{
         padding: 12,
         paddingTop: 50,
-        rowGap: 4,
+        rowGap: 8,
       }}
     >
       <View
@@ -93,15 +103,17 @@ export default function Index() {
             </Text>
             {value instanceof Date
               ? format(value, "dd/MM/yyyy")
-              : value?.label
-                ? value.label
-                : value}
+              : Array.isArray(value)
+                ? value.join(", ")
+                : value?.label
+                  ? value.label
+                  : value || ""}
           </Text>
         ))}
       </View>
 
       <TextField<typeof MaterialIcons, typeof Ionicons>
-        label="TextField"
+        label="Text"
         name="text"
         control={control}
         rightIcon={{
@@ -143,6 +155,25 @@ export default function Index() {
         queryKey="paginated-autocomplete"
         filterKey="label"
         service={getOptions}
+      />
+
+      <CheckboxField
+        label="Checkbox"
+        name="checkbox"
+        control={control}
+        options={options.slice(0, 4)}
+        optionLabelKey="label"
+        optionCompareKey="id"
+        optionValueKey="label"
+      />
+
+      <RadioField
+        label="Radio"
+        name="radio"
+        control={control}
+        options={options.slice(0, 4)}
+        optionLabelKey="label"
+        optionCompareKey=""
       />
     </ScrollView>
   );

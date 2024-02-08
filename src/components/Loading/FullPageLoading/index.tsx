@@ -1,13 +1,10 @@
 import React, { useContext } from "react";
-import { Text, View } from "react-native";
 import LottieView from "lottie-react-native";
 import { GlobalContext } from "../../../contexts/GlobalContext";
 import heartBeat from "../../../animations/heart-beat.json";
-import styles from "./styles";
+import { LoadingContainer, LoadingMessage } from "./styles";
 
 function FullPageLoading() {
-  const loadingStyles = styles();
-
   const {
     loadingConfig: { isLoading, message, opacity = 0.9 },
   } = useContext(GlobalContext)!;
@@ -15,7 +12,7 @@ function FullPageLoading() {
   if (!isLoading) return null;
 
   return (
-    <View style={{ ...loadingStyles.loadingContainer, opacity }}>
+    <LoadingContainer opacity={opacity}>
       <LottieView
         autoPlay
         source={heartBeat}
@@ -24,8 +21,8 @@ function FullPageLoading() {
           height: 300,
         }}
       />
-      {message && <Text style={loadingStyles.message}>{message}</Text>}
-    </View>
+      {message && <LoadingMessage>{message}</LoadingMessage>}
+    </LoadingContainer>
   );
 }
 

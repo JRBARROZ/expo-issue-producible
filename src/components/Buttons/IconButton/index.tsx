@@ -4,7 +4,7 @@ import { IIconButtonProps } from "./types";
 import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
 const IconButton = forwardRef(
-  <T extends ExpoVectorIcon = ExpoVectorIcon>(
+  <T extends ExpoVectorIcon>(
     { icon, name, color, size = 24, activeOpacity = 0.7, style, onPress }: IIconButtonProps<T>,
     ref: ForwardedRef<any>,
   ) => {

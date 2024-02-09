@@ -10,12 +10,12 @@ import {
 import { IIconButtonProps } from "@/components/Buttons/IconButton/types";
 import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
-type IInputIcon<T extends ExpoVectorIcon = ExpoVectorIcon> = Omit<
+type IInputIcon<T extends ExpoVectorIcon> = Omit<
   IIconButtonProps<T>,
   "style" | "activeOpacity" | "size"
 >;
 
-interface ITextFieldProps<L extends ExpoVectorIcon = ExpoVectorIcon, R extends ExpoVectorIcon = L> {
+interface ITextFieldProps<L extends ExpoVectorIcon, R extends ExpoVectorIcon = L> {
   name?: string;
   value?: string | number | null;
   control?: Control<any, any>;

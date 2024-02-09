@@ -38,6 +38,8 @@ function SelectField<T extends Record<string, any>>({
     return optionCompareKey || optionLabelKey;
   }, [optionCompareKey, optionLabelKey]);
 
+  const anything: any = true;
+
   const [ref, handleOpen, handleClose] = useBottomSheet();
   const maxHeight = useMemo(() => {
     const height = Dimensions.get("window").height * 0.967;
@@ -132,9 +134,11 @@ function SelectField<T extends Record<string, any>>({
       <BottomSheetList
         ref={ref}
         index={0}
-        snapPoints={animatedSnapPoints.value}
+        snapPoints={animatedSnapPoints as any}
         handleHeight={animatedHandleHeight}
         contentHeight={animatedContentHeight}
+        waitFor={anything}
+        simultaneousHandlers={anything}
         onClose={() => {
           setOpen(false);
           Keyboard.dismiss();

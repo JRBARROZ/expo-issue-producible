@@ -14,6 +14,8 @@ import { format } from "date-fns";
 import AutoCompleteField from "@/components/FormFields/AutocompleteField";
 import { ScrollView } from "react-native-gesture-handler";
 import PaginatedAutoCompleteField from "@/components/FormFields/PaginatedAutocompleteField";
+import { BottomSheetMenu } from "@/components/BottomSheets";
+import { useBottomSheet } from "@/hooks";
 
 interface IOption {
   id: number;
@@ -65,6 +67,8 @@ async function getOptions({ page, limit, label }: IGetOptionsParams) {
 }
 
 export default function Index() {
+  const [ref, handleOpen] = useBottomSheet();
+
   const { control, watch } = useForm<IFormValues>({
     defaultValues: {
       text: "",
@@ -127,6 +131,27 @@ export default function Index() {
           ))}
         </View>
 
+        <BottomSheetMenu
+          ref={ref}
+          items={[
+            {
+              text: "Opção 1",
+              icon: MaterialIcons,
+              name: "ac-unit",
+            },
+            {
+              text: "Opção 2",
+              icon: MaterialIcons,
+              name: "16mp",
+            },
+            {
+              text: "Opção 3",
+              icon: MaterialIcons,
+              name: "adb",
+            },
+          ]}
+        />
+
         <TextField<typeof MaterialIcons, typeof Ionicons>
           label="Text"
           name="text"
@@ -134,6 +159,9 @@ export default function Index() {
           rightIcon={{
             name: "add-circle",
             icon: Ionicons,
+            onPress() {
+              handleOpen();
+            },
           }}
           leftIcon={{
             name: "accessibility-new",

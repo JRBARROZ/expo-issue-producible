@@ -1,8 +1,9 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { MutableRefObject, useCallback, useRef } from "react";
 
-type IHandleBottomSheet = () => void;
-type IUseBottomSheet = [any, IHandleBottomSheet, IHandleBottomSheet];
+type IHandleOpenBottomSheet = () => void;
+type IHandleCloseBottomSheet = () => void;
+type IUseBottomSheet = [any, IHandleOpenBottomSheet, IHandleCloseBottomSheet];
 
 export default function useBottomSheet(): IUseBottomSheet {
   const ref = useRef<BottomSheetModalMethods | null>(null);

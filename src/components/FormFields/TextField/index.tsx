@@ -15,7 +15,7 @@ const defaultController: any = {
   },
 };
 
-function TextField<L extends ExpoVectorIcon = ExpoVectorIcon, R extends ExpoVectorIcon = L>({
+function TextField<L extends ExpoVectorIcon, R extends ExpoVectorIcon = L>({
   name,
   value,
   control,

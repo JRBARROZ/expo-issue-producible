@@ -1,7 +1,7 @@
 import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 import { GestureResponderEvent, StyleProp, ViewStyle } from "react-native";
 
-interface IIconButtonProps<T extends ExpoVectorIcon = ExpoVectorIcon> {
+interface IIconButtonProps<T extends ExpoVectorIcon> {
   name: keyof T["glyphMap"];
   icon: T;
   color?: string;

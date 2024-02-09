@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from "react";
 import { useController } from "react-hook-form";
-import { TextInput, View } from "react-native";
 import Animated, {
   interpolate,
   runOnJS,
@@ -10,11 +9,14 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
-import styles from "./styles";
+import { PanGestureHandler, PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
+import { FillTrack, Slide, SlideTrack, SliderContainer, SliderLabel } from "./styles";
 import { Label, ErrorMessage } from "../FieldUtilitaries";
+import { IAnimationContext, ISliderFieldProps } from "./types";
 
-const AnimatedSliderLabel = Animated.createAnimatedComponent(TextInput);
+const AnimatedSliderLabel = Animated.createAnimatedComponent(SliderLabel);
+const AnimatedFillTrack = Animated.createAnimatedComponent(FillTrack);
+const AnimatedSlide = Animated.createAnimatedComponent(Slide);
 
 export default function SliderField({
   name,
@@ -24,20 +26,18 @@ export default function SliderField({
   min = 0,
   max = 100,
   step = 1,
-  style,
   disabled,
+  required,
   customOnChange,
-  ...props
-}) {
-  const sliderStyles = styles();
-
+  containerProps,
+}: ISliderFieldProps) {
   const {
     field,
     formState: { errors },
   } = useController({ name, control });
-  const error = errors[field.name]?.message;
+  const error = errors[field.name]?.message as string | undefined;
 
-  const fieldValue = value !== undefined ? value : field.value;
+  const fieldValue: number = value !== undefined ? value : field.value;
 
   function handleChange() {
     const value =
@@ -55,7 +55,7 @@ export default function SliderField({
   const maxWidth = useSharedValue(0);
   const changedBy = useSharedValue("external");
 
-  const calculateX = useCallback((value, maxWidth) => {
+  const calculateX = useCallback((value: number, maxWidth: number) => {
     const relativeValue = (value - min) / (max - min);
     const initialSlideXAxis = relativeValue * maxWidth;
     return initialSlideXAxis;
@@ -87,7 +87,7 @@ export default function SliderField({
     opacity: interpolate(slideScale.value, [1, 1.3], [0, 1]),
   }));
 
-  const slideGesture = useAnimatedGestureHandler({
+  const slideGesture = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, IAnimationContext>({
     onStart: (_, context) => {
       context.startX = slideXAxis.value;
       slideScale.value = withTiming(1.3);
@@ -102,11 +102,11 @@ export default function SliderField({
     onEnd: () => {
       slideScale.value = withTiming(1);
       changedBy.value = "internal";
-      runOnJS(handleChange)(value);
+      runOnJS(handleChange)();
     },
   });
 
-  const animatedSliderLabelProps = useAnimatedProps(() => {
+  const animatedSliderLabelProps = useAnimatedProps<any>(() => {
     const value =
       min + Math.round(slideXAxis.value / (maxWidth.value / ((max - min) / step))) * step;
 
@@ -114,29 +114,28 @@ export default function SliderField({
   });
 
   return (
-    <View {...props} style={[sliderStyles.container, style]}>
-      <Label error={error} required={require} disabled={disabled}>
+    <SliderContainer {...containerProps}>
+      <Label error={!!error} required={required} disabled={disabled}>
         {label}
       </Label>
-      <View
-        style={sliderStyles.slideTrack}
+      <SlideTrack
         onLayout={function (event) {
           const { width } = event.nativeEvent.layout;
           maxWidth.value = width;
           slideXAxis.value = withTiming(calculateX(fieldValue, width));
         }}
       >
-        <Animated.View style={[sliderStyles.fillTrack, fillTrackAnimatedStyles]} />
+        <AnimatedFillTrack style={fillTrackAnimatedStyles} />
         <AnimatedSliderLabel
           editable={false}
-          style={[sliderStyles.sliderLabel, sliderLabelAnimatedStyles]}
+          style={sliderLabelAnimatedStyles}
           animatedProps={animatedSliderLabelProps}
         />
         <PanGestureHandler onGestureEvent={slideGesture}>
-          <Animated.View style={[sliderStyles.slide, slideAnimatedStyles]} />
+          <AnimatedSlide style={slideAnimatedStyles} />
         </PanGestureHandler>
-      </View>
+      </SlideTrack>
       <ErrorMessage>{error}</ErrorMessage>
-    </View>
+    </SliderContainer>
   );
 }

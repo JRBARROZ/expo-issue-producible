@@ -3,6 +3,7 @@ import {
   DateField,
   RadioField,
   SelectField,
+  SliderField,
   SwitchField,
   TextField,
 } from "@/components/FormFields";
@@ -28,6 +29,7 @@ interface IFormValues {
   checkbox: IOption["label"][];
   radio: string | null;
   switch: boolean;
+  slider: number;
 }
 
 interface IGetOptionsParams {
@@ -73,6 +75,7 @@ export default function Index() {
       checkbox: [],
       radio: null,
       switch: false,
+      slider: 0,
     },
   });
 
@@ -115,7 +118,11 @@ export default function Index() {
                   ? value.join(", ")
                   : value?.label
                     ? value.label
-                    : value || ""}
+                    : value === true
+                      ? "Sim"
+                      : value === false
+                        ? "Não"
+                        : value}
             </Text>
           ))}
         </View>
@@ -185,6 +192,8 @@ export default function Index() {
         />
 
         <SwitchField label="Switch" name="switch" control={control} />
+
+        <SliderField label="Slider" name="slider" control={control} />
       </View>
     </ScrollView>
   );

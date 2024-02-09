@@ -1,4 +1,4 @@
-import { IShape } from "./types";
+import { IShape } from "@/types/Theme";
 
 const shape: IShape = {
   borderRadius: 6,

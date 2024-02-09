@@ -1,4 +1,4 @@
-import { IShadow } from "./types";
+import { IShadow } from "@/types/Theme";
 
 const shadowColor = "#000000";
 

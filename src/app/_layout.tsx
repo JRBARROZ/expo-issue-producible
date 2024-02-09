@@ -26,38 +26,38 @@ export default function Setup() {
 
   return (
     <ThemeContextProvider>
-      {/* <ErrorBoundary> */}
-      <QueryClientProvider client={queryClient}>
-        <GlobalContextProvider>
-          <AuthProvider>
-            <GestureHandlerRootView
-              style={{ flex: 1, backgroundColor: theme["light"].colors.secondary?.[0] }}
-            >
-              <BottomSheetModalProvider>
-                {Platform.OS === "android" ? (
-                  <>
-                    <StatusBar
-                      style="light"
-                      backgroundColor={theme["light"].colors.primary?.[200]}
-                    />
-                    <Slot />
-                  </>
-                ) : (
-                  <>
-                    <StatusBar style="light" />
-                    <SafeAreaView style={{ flex: 1 }}>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <GlobalContextProvider>
+            <AuthProvider>
+              <GestureHandlerRootView
+                style={{ flex: 1, backgroundColor: theme["light"].colors.secondary?.[0] }}
+              >
+                <BottomSheetModalProvider>
+                  {Platform.OS === "android" ? (
+                    <>
+                      <StatusBar
+                        style="light"
+                        backgroundColor={theme["light"].colors.primary?.[200]}
+                      />
                       <Slot />
-                    </SafeAreaView>
-                  </>
-                )}
-              </BottomSheetModalProvider>
-              <StatusNotifier />
-              <FullPageLoading />
-            </GestureHandlerRootView>
-          </AuthProvider>
-        </GlobalContextProvider>
-      </QueryClientProvider>
-      {/* </ErrorBoundary> */}
+                    </>
+                  ) : (
+                    <>
+                      <StatusBar style="light" />
+                      <SafeAreaView style={{ flex: 1 }}>
+                        <Slot />
+                      </SafeAreaView>
+                    </>
+                  )}
+                </BottomSheetModalProvider>
+                <StatusNotifier />
+                <FullPageLoading />
+              </GestureHandlerRootView>
+            </AuthProvider>
+          </GlobalContextProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
     </ThemeContextProvider>
   );
 }

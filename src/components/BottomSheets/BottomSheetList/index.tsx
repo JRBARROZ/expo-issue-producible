@@ -1,4 +1,4 @@
-import React, { MutableRefObject, Ref, forwardRef, useRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import {
   BottomSheetBackdropProps,
   BottomSheetFlatList,

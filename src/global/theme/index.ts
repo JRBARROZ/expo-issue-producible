@@ -1,7 +1,7 @@
 import { darkColors, lightColors } from "./colors";
 import shadows from "./shadows";
 import shape from "./shape";
-import { ITheme } from "./types";
+import { ITheme } from "@/types/Theme";
 import typography from "./typography";
 
 const theme: ITheme = {

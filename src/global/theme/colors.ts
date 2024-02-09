@@ -1,4 +1,4 @@
-import { IColors, IColorsPattern } from "./types";
+import { IColors, IColorsPattern } from "@/types/Theme";
 
 const baseColors: IColorsPattern = {
   0: "#FFFFFF",

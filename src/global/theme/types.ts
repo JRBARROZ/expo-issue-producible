@@ -49,17 +49,20 @@ interface IShape {
 //Theme Shadows
 
 interface IShadowPattern {
-  shadowColor: string;
-  shadowOffset: {
-    width: number;
-    height: number;
+  web: string;
+  mobile: {
+    shadowColor: string;
+    shadowOffset: {
+      width: number;
+      height: number;
+    };
+    shadowOpacity: number;
+    shadowRadius: number;
+    elevation: number;
   };
-  shadowOpacity: number;
-  shadowRadius: number;
-  elevation: number;
 }
 
-type IShadowKeys = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type IShadowKeys = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 type IShadow = {
   [key in IShadowKeys]: IShadowPattern;

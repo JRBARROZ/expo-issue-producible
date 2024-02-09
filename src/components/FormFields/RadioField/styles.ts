@@ -38,7 +38,6 @@ const RadioInput = styled.View<IRadioInputProps>`
     if (selected) return theme.colors.primary?.[200];
     return theme.colors.secondary?.[400];
   }};
-  background-color: ${({ theme, selected }) => (selected ? theme.colors.primary?.[200] : "transparent")};
 `;
 
 const RadioInputSelection = styled.View<Omit<IRadioInputProps, "error">>`

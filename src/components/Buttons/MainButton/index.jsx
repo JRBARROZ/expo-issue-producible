@@ -46,7 +46,7 @@ function MainButton({
           borderWidth: isOutlined ? 1 : 0,
           borderColor: colorScheme ? theme.colors[colorScheme][500] : theme.colors.secondary[400],
         },
-        !isOutlined && theme.shadows[1],
+        !isOutlined && theme.shadows[1].mobile,
         style,
         (loading || disabled) && mainButtonStyles.disabled,
       ]}

@@ -13,7 +13,7 @@ const styles = () => {
       borderRadius: 12,
       borderWidth: 1,
       borderColor: theme.colors.secondary[100],
-      ...theme.shadows[1],
+      ...theme.shadows[1].mobile,
       rowGap: 2,
     },
     titleContainer: {

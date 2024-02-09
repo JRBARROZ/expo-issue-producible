@@ -3,6 +3,7 @@ import {
   DateField,
   RadioField,
   SelectField,
+  SwitchField,
   TextField,
 } from "@/components/FormFields";
 import { useForm } from "react-hook-form";
@@ -26,6 +27,7 @@ interface IFormValues {
   paginated_autocomplete: IOption | null;
   checkbox: IOption["label"][];
   radio: string | null;
+  switch: boolean;
 }
 
 interface IGetOptionsParams {
@@ -70,6 +72,7 @@ export default function Index() {
       paginated_autocomplete: null,
       checkbox: [],
       radio: null,
+      switch: false,
     },
   });
 
@@ -78,103 +81,111 @@ export default function Index() {
   return (
     <ScrollView
       style={{
-        padding: 12,
-        paddingTop: 50,
-        rowGap: 8,
+        paddingHorizontal: 12,
       }}
+      keyboardShouldPersistTaps="always"
     >
       <View
         style={{
-          padding: 12,
-          backgroundColor: "#e0e0e0",
-          borderRadius: 6,
-          rowGap: 2,
-          margin: 6,
+          paddingVertical: 50,
+          rowGap: 8,
         }}
       >
-        {Object.entries(values).map(([key, value]) => (
-          <Text>
-            <Text
-              style={{
-                fontWeight: "500",
-              }}
-            >
-              {key}:{" "}
+        <View
+          style={{
+            padding: 12,
+            backgroundColor: "#e0e0e0",
+            borderRadius: 6,
+            rowGap: 2,
+            marginBottom: 6,
+          }}
+        >
+          {Object.entries(values).map(([key, value]) => (
+            <Text>
+              <Text
+                style={{
+                  fontWeight: "500",
+                }}
+              >
+                {key}:{" "}
+              </Text>
+              {value instanceof Date
+                ? format(value, "dd/MM/yyyy")
+                : Array.isArray(value)
+                  ? value.join(", ")
+                  : value?.label
+                    ? value.label
+                    : value || ""}
             </Text>
-            {value instanceof Date
-              ? format(value, "dd/MM/yyyy")
-              : Array.isArray(value)
-                ? value.join(", ")
-                : value?.label
-                  ? value.label
-                  : value || ""}
-          </Text>
-        ))}
+          ))}
+        </View>
+
+        <TextField<typeof MaterialIcons, typeof Ionicons>
+          label="Text"
+          name="text"
+          control={control}
+          rightIcon={{
+            name: "add-circle",
+            icon: Ionicons,
+          }}
+          leftIcon={{
+            name: "accessibility-new",
+            icon: MaterialIcons,
+          }}
+        />
+
+        <DateField label="DateField" name="date" control={control} />
+
+        <SelectField
+          label="Select"
+          name="select"
+          control={control}
+          options={options}
+          optionLabelKey="label"
+          optionCompareKey="id"
+        />
+
+        <AutoCompleteField
+          label="Autocomplete"
+          name="autocomplete"
+          control={control}
+          options={options}
+          optionLabelKey="label"
+          optionCompareKey="id"
+        />
+
+        <PaginatedAutoCompleteField
+          label="PaginatedAutocomplete"
+          name="paginated_autocomplete"
+          control={control}
+          optionLabelKey="label"
+          optionCompareKey="id"
+          queryKey="paginated-autocomplete"
+          filterKey="label"
+          service={getOptions}
+        />
+
+        <CheckboxField
+          label="Checkbox"
+          name="checkbox"
+          control={control}
+          options={options.slice(0, 4)}
+          optionLabelKey="label"
+          optionCompareKey="id"
+          optionValueKey="label"
+        />
+
+        <RadioField
+          label="Radio"
+          name="radio"
+          control={control}
+          options={options.slice(0, 4)}
+          optionLabelKey="label"
+          optionCompareKey=""
+        />
+
+        <SwitchField label="Switch" name="switch" control={control} />
       </View>
-
-      <TextField<typeof MaterialIcons, typeof Ionicons>
-        label="Text"
-        name="text"
-        control={control}
-        rightIcon={{
-          name: "add-circle",
-          icon: Ionicons,
-        }}
-        leftIcon={{
-          name: "accessibility-new",
-          icon: MaterialIcons,
-        }}
-      />
-
-      <DateField label="DateField" name="date" control={control} />
-
-      <SelectField
-        label="Select"
-        name="select"
-        control={control}
-        options={options}
-        optionLabelKey="label"
-        optionCompareKey="id"
-      />
-
-      <AutoCompleteField
-        label="Autocomplete"
-        name="autocomplete"
-        control={control}
-        options={options}
-        optionLabelKey="label"
-        optionCompareKey="id"
-      />
-
-      <PaginatedAutoCompleteField
-        label="PaginatedAutocomplete"
-        name="paginated_autocomplete"
-        control={control}
-        optionLabelKey="label"
-        optionCompareKey="id"
-        queryKey="paginated-autocomplete"
-        filterKey="label"
-        service={getOptions}
-      />
-
-      <CheckboxField
-        label="Checkbox"
-        name="checkbox"
-        control={control}
-        options={options.slice(0, 4)}
-        optionLabelKey="label"
-        optionCompareKey="id"
-        optionValueKey="label"
-      />
-
-      <RadioField
-        label="Radio"
-        name="radio"
-        control={control}
-        options={options.slice(0, 4)}
-        optionLabelKey="label"
-        optionCompareKey=""
-      />
     </ScrollView>
   );
 }

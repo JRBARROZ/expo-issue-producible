@@ -17,7 +17,7 @@ const styles = () => {
       padding: theme.shape.padding,
       borderRadius: 4,
       marginBottom: 16,
-      ...theme.shadows[1],
+      ...theme.shadows[1].mobile,
     },
     innerContainer: {
       width: Dimensions.get("window").width - 112.5,

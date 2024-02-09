@@ -42,7 +42,7 @@ const styles = () => {
       backgroundColor: theme.colors.secondary[0],
       borderWidth: 1,
       borderColor: theme.colors.secondary[300],
-      ...theme.shadows[2],
+      ...theme.shadows[2].mobile,
       fontFamily: theme.typography.fonts.primary.semibold,
       fontSize: theme.typography.size.caption,
       color: theme.colors.text[700],

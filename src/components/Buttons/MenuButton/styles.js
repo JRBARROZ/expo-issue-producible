@@ -10,7 +10,7 @@ const styles = () => {
       borderRadius: 12,
       width: 180,
       height: 150,
-      ...theme.shadows[1],
+      ...theme.shadows[1].mobile,
     },
     icon_container: {
       flex: 1.3,

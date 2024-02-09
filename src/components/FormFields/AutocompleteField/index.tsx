@@ -171,10 +171,14 @@ function AutoCompleteField<T extends Record<string, any>>({
       return accessObjectByString(item, optionValueKey) === field.value;
     }
 
-    return (
-      accessObjectByString(field.value, optionIdentifier) ===
-      accessObjectByString(item, optionIdentifier)
-    );
+    if (field.value) {
+      return (
+        accessObjectByString(field.value, optionIdentifier) ===
+        accessObjectByString(item, optionIdentifier)
+      );
+    }
+
+    return false;
   }
 
   function togleOpen() {

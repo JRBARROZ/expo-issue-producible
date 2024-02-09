@@ -17,7 +17,7 @@ const styles = () => {
       width: "100%",
       alignSelf: "center",
       backgroundColor: theme.colors.secondary[0],
-      ...theme.shadows[1],
+      ...theme.shadows[1].mobile,
     },
     smallTextContainer: {
       width: "100%",

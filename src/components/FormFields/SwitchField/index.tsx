@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useController } from "react-hook-form";
-import { View, Pressable } from "react-native";
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -9,10 +8,12 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "styled-components";
-import styles from "./styles";
+import { LabelContainer, SwitchContainer, SwitchInput, SwitchSlide } from "./styles";
 import { ErrorMessage, Label } from "../FieldUtilitaries";
+import { ISwitchProps } from "./types";
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const AnimatedSwitchInput = Animated.createAnimatedComponent(SwitchInput);
+const AnimatedSwitchSlide = Animated.createAnimatedComponent(SwitchSlide);
 
 function SwithcField({
   name,
@@ -24,37 +25,36 @@ function SwithcField({
   containerProps,
   onChange,
   customOnChange,
-}) {
+}: ISwitchProps) {
   const theme = useTheme();
-  const switchFieldStyles = styles();
 
   const {
     field,
     formState: { errors },
   } = useController({ name, control });
-  const error = errors[field.name]?.message;
+  const error = errors[field.name]?.message as string | undefined;
 
-  const fieldValue = value !== undefined ? value : field.value;
+  const fieldValue: boolean = value !== undefined ? value : field.value;
 
   const slidePosition = useSharedValue(-2);
-  const activeSlide = useSharedValue(false);
+  const activeSlide = useSharedValue(0);
 
   useEffect(() => {
     if (fieldValue) {
       slidePosition.value = 21;
-      activeSlide.value = true;
+      activeSlide.value = 1;
     }
   }, []);
 
   const inputAnimatedStyles = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
       activeSlide.value,
-      [false, true],
+      [0, 1],
       [theme.colors.secondary[100], theme.colors.primary[200]],
     ),
     borderColor: interpolateColor(
       activeSlide.value,
-      [false, true],
+      [0, 1],
       [theme.colors.secondary[300], theme.colors.primary[200]],
     ),
   }));
@@ -68,10 +68,10 @@ function SwithcField({
 
     if (value) {
       slidePosition.value = withSpring(21);
-      activeSlide.value = withTiming(true);
+      activeSlide.value = withTiming(1);
     } else {
       slidePosition.value = withSpring(-2);
-      activeSlide.value = withTiming(false);
+      activeSlide.value = withTiming(0);
     }
 
     if (onChange instanceof Function) {
@@ -86,22 +86,17 @@ function SwithcField({
   }
 
   return (
-    <View {...containerProps} style={[switchFieldStyles.container, containerProps?.style]}>
-      <View style={switchFieldStyles.labelContainer}>
-        <AnimatedPressable
-          style={[switchFieldStyles.input, inputAnimatedStyles]}
-          onPress={handleChange}
-        >
-          <Animated.View
-            style={[switchFieldStyles.slide, slideAnimatedStyles, error && switchFieldStyles.error]}
-          />
-        </AnimatedPressable>
-        <Label disabled={disabled} required={required} error={error}>
+    <SwitchContainer {...containerProps}>
+      <LabelContainer>
+        <AnimatedSwitchInput style={inputAnimatedStyles} onPress={handleChange}>
+          <AnimatedSwitchSlide error={!!error} style={slideAnimatedStyles} />
+        </AnimatedSwitchInput>
+        <Label disabled={disabled} required={required} error={!!error}>
           {label}
         </Label>
-      </View>
+      </LabelContainer>
       <ErrorMessage>{error}</ErrorMessage>
-    </View>
+    </SwitchContainer>
   );
 }
 

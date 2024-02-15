@@ -1,7 +1,11 @@
 import React, { forwardRef, useRef } from "react";
-import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { View } from "react-native";
-import styles from "./styles";
+import {
+  BottomSheetBackdropProps,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
+import styles, { Backdrop } from "./styles";
+import { IBottomSheetProps } from "./types";
 
 const BottomSheet = forwardRef(
   (
@@ -18,14 +22,14 @@ const BottomSheet = forwardRef(
       onOpen,
       onClose,
       ...props
-    },
-    ref
+    }: IBottomSheetProps,
+    ref: any,
   ) => {
     const bottomSheetStyles = styles();
     const firstRender = useRef(true);
 
-    const CustomBackDrop = React.memo(({ style }) => (
-      <View style={[style, bottomSheetStyles.backdrop, backDropStyle]} />
+    const CustomBackDrop = React.memo(({ style }: BottomSheetBackdropProps) => (
+      <Backdrop style={[style, backDropStyle]} />
     ));
 
     return (
@@ -58,7 +62,7 @@ const BottomSheet = forwardRef(
         </BottomSheetScrollView>
       </BottomSheetModal>
     );
-  }
+  },
 );
 
 export default BottomSheet;

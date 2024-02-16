@@ -5,7 +5,16 @@ import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
 const IconButton = forwardRef(
   <T extends ExpoVectorIcon>(
-    { icon, name, color, size = 24, activeOpacity = 0.7, style, onPress }: IIconButtonProps<T>,
+    {
+      icon,
+      name,
+      color,
+      size = 24,
+      activeOpacity = 0.7,
+      style,
+      disabled,
+      onPress,
+    }: IIconButtonProps<T>,
     ref: ForwardedRef<any>,
   ) => {
     const [focused, setFocused] = useState(false);
@@ -30,6 +39,7 @@ const IconButton = forwardRef(
         onPressOut={toggleFocus}
         onPress={onPress}
         activeOpacity={activeOpacity}
+        disabled={disabled}
       >
         {isIcon(Icon) && <Icon name={name} color={color} size={size} />}
       </IconButtonContainer>

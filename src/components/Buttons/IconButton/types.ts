@@ -7,6 +7,7 @@ interface IIconButtonProps<T extends ExpoVectorIcon> {
   color?: string;
   size?: number;
   activeOpacity?: number;
+  disabled?: boolean;
   style?: StyleProp<ViewStyle>;
   onPress?(event: GestureResponderEvent): void;
 }

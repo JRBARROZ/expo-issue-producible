@@ -16,6 +16,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import PaginatedAutoCompleteField from "@/components/FormFields/PaginatedAutocompleteField";
 import { BottomSheetMenu } from "@/components/BottomSheets";
 import { useBottomSheet } from "@/hooks";
+import { MainButton } from "@/components/Buttons";
+import { FlexibleCard } from "@/components/Cards";
 
 interface IOption {
   id: number;
@@ -222,6 +224,33 @@ export default function Index() {
         <SwitchField label="Switch" name="switch" control={control} />
 
         <SliderField label="Slider" name="slider" control={control} />
+
+        <MainButton>Main Button</MainButton>
+
+        <FlexibleCard
+          title="Card test"
+          data={options[0]}
+          icon={{
+            as: Ionicons,
+            name: "add",
+          }}
+          descriptions={[
+            {
+              key: "id",
+              label: "Identificador",
+            },
+            {
+              key: "label",
+              label: "Descrição",
+            },
+          ]}
+          actions={[
+            {
+              icon: MaterialIcons,
+              iconName: "14mp",
+            },
+          ]}
+        />
       </View>
     </ScrollView>
   );

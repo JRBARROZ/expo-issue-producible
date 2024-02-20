@@ -1,15 +1,19 @@
 import React, { useMemo, useRef, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useTheme } from "styled-components";
 import { Alert } from "../Dialogs";
-import accessObjectByString from "../../utils/accessObjectByString";
+import accessObjectByString from "@/utils/accessObjectByString";
 import Icon from "../Icon";
-import styles from "./styles";
+import { ActionsContainer, IconContainer, SwipeableContainer } from "./styles";
+import { ActionAlert, ICustomSwipleableActions, ISwipeableProps } from "./types";
+import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
-function Swipeable({
+const AnimatedSwipeableContainer = Animated.createAnimatedComponent(SwipeableContainer);
+
+function Swipeable<T extends Record<string, any>, I extends ExpoVectorIcon>({
   data,
   actions,
   customActions,
@@ -17,18 +21,17 @@ function Swipeable({
   itemKeyExtractor,
   confirmMessage = "Você realmente deseja *action* este item?",
   children,
-}) {
+}: ISwipeableProps<T, I>) {
   const theme = useTheme();
-  const swipeableStyles = styles();
-  const actionConfirm = useRef();
-  const [open, setOpen] = useState();
+  const actionAlert = useRef<ActionAlert | null>(null);
+  const [open, setOpen] = useState(false);
 
   const swipeSize = useMemo(
     () => (actions.length >= 1 ? 80 + 95 * (actions.length - 1) : 200),
     [actions],
   );
 
-  const swipeActions = useMemo(
+  const swipeActions: ICustomSwipleableActions<ExpoVectorIcon> = useMemo(
     () => ({
       more: {
         title: "mais",
@@ -65,7 +68,7 @@ function Swipeable({
     setOpen((open) => !open);
   }
 
-  function handleMessage(row, action) {
+  function handleMessage(row: T, action: string) {
     const message = confirmMessage.replace("action", action);
     const splitedMessage = message.split(" ").map((str) => {
       if (str.match(/({\D+})/gi)) {
@@ -83,9 +86,9 @@ function Swipeable({
     return completedMessage;
   }
 
-  const actionItems = (data) => (
-    <View style={swipeableStyles.actionsContainer}>
-      {actions?.map((action, index, array) => {
+  const actionItems = (data: T) => (
+    <ActionsContainer>
+      {actions.map((action, index, array) => {
         const disabled = disabledActions ? disabledActions(data, action.name) : false;
 
         return (
@@ -94,14 +97,16 @@ function Swipeable({
               itemKeyExtractor ? accessObjectByString(data, itemKeyExtractor) : index
             }`}
             onPress={() => {
-              if (action?.onPress instanceof Function) {
+              if (action.onPress instanceof Function) {
                 const confirmation =
                   action.confirm !== undefined ? action.confirm : swipeActions[action.name].confirm;
 
                 if (confirmation) {
-                  actionConfirm.current = {
+                  actionAlert.current = {
                     message: handleMessage(data, swipeActions[action.name].title),
-                    onPress: () => action.onPress(data),
+                    onPress: () => {
+                      if (action.onPress) action.onPress(data);
+                    },
                   };
                   togleOpen();
                 } else {
@@ -112,19 +117,11 @@ function Swipeable({
             activeOpacity={0.7}
             disabled={disabled}
           >
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: swipeActions[action.name].color,
-                height: "100%",
-                width: index === 0 ? 95 : 80,
-                borderColor: theme.colors.secondary[0],
-                borderRightWidth: 1,
-                borderTopRightRadius: index === array.length - 1 ? 12 : 0,
-                borderBottomRightRadius: index === array.length - 1 ? 12 : 0,
-                opacity: disabled ? 0.5 : 1,
-              }}
+            <IconContainer
+              color={swipeActions[action.name].color}
+              index={index}
+              length={array.length - 1}
+              disabled={disabled}
             >
               <Icon
                 icon={swipeActions[action.name].icon}
@@ -132,11 +129,11 @@ function Swipeable({
                 color={theme.colors.secondary[0]}
                 size={24}
               />
-            </View>
+            </IconContainer>
           </TouchableOpacity>
         );
       })}
-    </View>
+    </ActionsContainer>
   );
 
   const xAxis = useSharedValue(0);
@@ -168,17 +165,17 @@ function Swipeable({
     <>
       <Alert
         title="Confirmação"
-        message={actionConfirm.current?.message}
+        message={actionAlert.current?.message}
         open={open}
         onClose={togleOpen}
-        onConfirm={actionConfirm.current?.onPress}
+        onConfirm={actionAlert.current?.onPress}
       />
-      <Animated.View style={swipeableStyles.swipeable}>
+      <AnimatedSwipeableContainer>
         {actionItems(data)}
         <GestureDetector gesture={handleGesture}>
           <Animated.View style={animatedStyle}>{children}</Animated.View>
         </GestureDetector>
-      </Animated.View>
+      </AnimatedSwipeableContainer>
     </>
   );
 }

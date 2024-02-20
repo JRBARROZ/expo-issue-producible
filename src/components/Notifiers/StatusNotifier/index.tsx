@@ -12,8 +12,9 @@ import { GlobalContext } from "@/contexts/GlobalContext";
 import styles from "./styles";
 import { useNotifier } from "@/hooks";
 import { useTheme } from "styled-components";
+import { IIconsNotifier } from "./types";
 
-const icons = {
+const icons: IIconsNotifier = {
   success: "checkmark-circle-sharp",
   error: "warning",
   warning: "md-alert-circle",

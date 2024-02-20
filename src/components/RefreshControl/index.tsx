@@ -1,8 +1,8 @@
 import React from "react";
-import { RefreshControl as Refresh } from "react-native";
+import { RefreshControl as Refresh, RefreshControlProps } from "react-native";
 import { useTheme } from "styled-components";
 
-function RefreshControl({ refreshing, onRefresh, ...props }) {
+function RefreshControl({ refreshing, onRefresh, ...props }: RefreshControlProps) {
   const theme = useTheme();
 
   return (

@@ -39,6 +39,7 @@ function MainButton<L extends ExpoVectorIcon, R extends ExpoVectorIcon = L>({
       activeOpacity={0.7}
       colorScheme={colorScheme}
       variant={variant}
+      style={style}
       {...props}
     >
       {!loading && leftIcon && (

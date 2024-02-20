@@ -1,4 +1,6 @@
-const querySerializer = (query) => {
+import { CustomParamsSerializer } from "axios";
+
+const querySerializer: CustomParamsSerializer = (query) => {
   const exceptionValues = query.nullable ? [null, 0, false] : [0, false];
   delete query.nullable;
 
@@ -20,7 +22,7 @@ const querySerializer = (query) => {
     });
   }
 
-  return queryParams;
+  return queryParams.toString();
 };
 
 export default querySerializer;

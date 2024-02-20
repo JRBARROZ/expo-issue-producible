@@ -1,4 +1,4 @@
-function limitName(name, limit, defaultValue = "") {
+function limitName(name: string, limit: number, defaultValue: string = "") {
   if (!name) return defaultValue;
 
   const splitedName = name.split(" ");

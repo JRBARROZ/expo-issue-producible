@@ -1,26 +1,24 @@
 import React from "react";
-import { Text } from "react-native";
 import { FlashList as List } from "@shopify/flash-list";
 import { SpinnerLoading } from "../../Loading";
 import accessObjectByString from "../../../utils/accessObjectByString";
-import styles from "./styles";
+import EmptyComponent from "@/components/EmptyComponent";
+import { IFlashListProps } from "./types";
 
-function FlashList({
+function FlashList<T = any>({
   data,
   estimatedItemSize,
   renderItem,
   onEndReached,
   ListEmptyComponent,
-  listFooterComponent,
+  ListFooterComponent,
   loading,
   itemKeyExtractor,
   emptyMessage,
   contentContainerStyle,
   style,
   ...props
-}) {
-  const flatListStyles = styles();
-
+}: IFlashListProps<T>) {
   return (
     <List
       data={data}
@@ -29,16 +27,18 @@ function FlashList({
       estimatedItemSize={estimatedItemSize}
       onEndReached={onEndReached}
       renderItem={renderItem}
-      keyExtractor={(item, index) =>
-        itemKeyExtractor ? accessObjectByString(item, itemKeyExtractor) : index
-      }
-      ListFooterComponent={loading ? <SpinnerLoading /> : listFooterComponent}
+      keyExtractor={(item, index) => {
+        if (typeof itemKeyExtractor === "string" && item instanceof Object) {
+          return accessObjectByString(item, itemKeyExtractor);
+        }
+
+        return index;
+      }}
+      ListFooterComponent={loading ? <SpinnerLoading /> : ListFooterComponent}
       ListEmptyComponent={
         !loading
           ? ListEmptyComponent || (
-              <Text style={flatListStyles.emptyMessage}>
-                {emptyMessage || "Nenhum item encontrado"}
-              </Text>
+              <EmptyComponent emptyMessage={emptyMessage || "Nenhum item encontrado"} />
             )
           : null
       }

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Modal, View, Text } from "react-native";
+import { Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, {
   useSharedValue,
@@ -8,8 +8,23 @@ import Animated, {
   withSequence,
 } from "react-native-reanimated";
 import { useTheme } from "styled-components";
-import styles from "./styles";
-import { IconButton, MainButton } from "../../Buttons";
+import styles, {
+  ActionsContainer,
+  AlertContainer,
+  CloseButton,
+  Emphasis,
+  MajorCircle,
+  Message,
+  MessageContainer,
+  MinorCircle,
+  Overlay,
+  Title,
+} from "./styles";
+import { MainButton } from "../../Buttons";
+import { IAlertProps } from "./types";
+import Icon from "@/components/Icon";
+
+const AnimatedAlertContainer = Animated.createAnimatedComponent(AlertContainer);
 
 function Alert({
   title,
@@ -18,10 +33,11 @@ function Alert({
   handleClose,
   onClose,
   onConfirm,
+  onCancel,
   confirmTextButton = "Confirmar",
   cancelTextButton = "Cancelar",
   hasActions = true,
-}) {
+}: IAlertProps) {
   const style = styles();
   const theme = useTheme();
 
@@ -31,15 +47,12 @@ function Alert({
       right: xAxis.value,
     };
   });
-  const processMessage = (message) => {
-    return message?.split(" ").map((str, index) => {
+
+  const processMessage = (message: string) => {
+    return message.split(" ").map((str, index) => {
       if (str.match(/(\*\D+\*)/gi)) {
         const cleanStr = str.replace(/\*/g, "");
-        return (
-          <Text key={index} style={style.boldText}>
-            {`${cleanStr} `}
-          </Text>
-        );
+        return <Emphasis>{`${cleanStr} `}</Emphasis>;
       }
       return `${str} `;
     });
@@ -63,12 +76,11 @@ function Alert({
 
   return (
     <Modal visible={open} transparent>
-      <View style={style.overlay}>
-        <Animated.View style={[style.alertContainer, animatedStyle]}>
-          <View style={style.messageContainer}>
+      <Overlay>
+        <AnimatedAlertContainer style={animatedStyle}>
+          <MessageContainer>
             {!hasActions && (
-              <IconButton
-                style={style.closeButton}
+              <CloseButton
                 onPress={() => {
                   if (handleClose instanceof Function) handleClose();
                   onClose();
@@ -76,30 +88,28 @@ function Alert({
                 name="close-outline"
                 size={26}
                 icon={Ionicons}
-                theme={theme.colors.secondary[900]}
+                color={theme.colors.secondary[900]}
               />
             )}
-            <View style={style.majorCircleView}>
-              <View style={style.minorCircleView}>
-                <IconButton
-                  style={{ padding: 0, alignSelf: "center" }}
+            <MajorCircle>
+              <MinorCircle>
+                <Icon
                   name="md-alert-circle-outline"
                   size={26}
                   icon={Ionicons}
                   color={theme.colors.error[500]}
                 />
-              </View>
-            </View>
-            <Text style={style.titleText}>{title}</Text>
-            <Text style={style.messageText}>{processMessage(message)}</Text>
-          </View>
+              </MinorCircle>
+            </MajorCircle>
+            <Title>{title}</Title>
+            <Message>{processMessage(message)}</Message>
+          </MessageContainer>
           {hasActions && (
-            <View style={style.buttonContainer}>
+            <ActionsContainer>
               <MainButton
                 style={style.button}
-                textStyle={style.textButton}
                 onPress={() => {
-                  if (handleClose instanceof Function) handleClose();
+                  if (onCancel instanceof Function) onCancel();
                   onClose();
                 }}
                 variant="outlined"
@@ -108,7 +118,6 @@ function Alert({
               </MainButton>
               <MainButton
                 style={style.button}
-                textStyle={style.textButton}
                 colorScheme="error"
                 onPress={() => {
                   if (onConfirm instanceof Function) onConfirm();
@@ -117,10 +126,10 @@ function Alert({
               >
                 {confirmTextButton}
               </MainButton>
-            </View>
+            </ActionsContainer>
           )}
-        </Animated.View>
-      </View>
+        </AnimatedAlertContainer>
+      </Overlay>
     </Modal>
   );
 }

@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
 import React from "react";
-import ErrorBoundary, { FallbackComponentProps } from "react-native-error-boundary";
 import LottieView from "lottie-react-native";
 import {
   AnimationContainer,
@@ -14,9 +12,19 @@ import {
 import errorAnimation from "../../animations/error.json";
 import { MainButton } from "../Buttons";
 import { IErrorBoundary } from "./types";
+import { Try } from "expo-router/src/views/Try";
+import { ErrorBoundaryProps } from "expo-router";
 
-export default function CustomErrorBoundary({ children }: IErrorBoundary) {
-  function FallbackComponent({ error, resetError }: FallbackComponentProps) {
+export default function ErrorBoundary({ children }: IErrorBoundary) {
+  const FallbackComponent = React.memo(({ error, retry }: ErrorBoundaryProps) => {
+    if (error) {
+      console.log(`
+        ========== SYSTEM ERROR ==========
+        ${error}
+        ==================================
+      `);
+    }
+
     return (
       <Wrapper>
         <Container>
@@ -37,24 +45,11 @@ export default function CustomErrorBoundary({ children }: IErrorBoundary) {
           Ocorreu um erro interno no aplicativo, por favor, nos reporte o ocorrido assim que
           possível e tente novamente <EmphasisMessage>:D</EmphasisMessage>
         </Message>
-        <MainButton onPress={resetError}>Tentar novamente</MainButton>
+        <MainButton onPress={retry}>Tentar novamente</MainButton>
         <ErrorViewer>/{error.toString()}</ErrorViewer>
       </Wrapper>
     );
-  }
+  });
 
-  return (
-    <ErrorBoundary
-      onError={(error) => {
-        console.log(`
-          ========== SYSTEM ERROR ==========
-          ${error}
-          ==================================
-        `);
-      }}
-      FallbackComponent={FallbackComponent}
-    >
-      {children}
-    </ErrorBoundary>
-  );
+  return <Try catch={FallbackComponent}>{children}</Try>;
 }

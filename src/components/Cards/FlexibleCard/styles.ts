@@ -15,7 +15,7 @@ const CardContainer = styled.TouchableOpacity`
   row-gap: 2px;
 `;
 
-const ActionsContainer = styled.TouchableOpacity`
+const ActionsContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;

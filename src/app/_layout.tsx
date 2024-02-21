@@ -31,7 +31,9 @@ export default function Setup() {
           <GlobalContextProvider>
             <AuthProvider>
               <GestureHandlerRootView
-                style={{ flex: 1, backgroundColor: theme["light"].colors.secondary?.[0] }}
+                style={{
+                  flex: 1,
+                }}
               >
                 <BottomSheetModalProvider>
                   {Platform.OS === "android" ? (

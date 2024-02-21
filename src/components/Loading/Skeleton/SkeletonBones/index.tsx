@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -18,7 +18,7 @@ const gradientColors = [
   "rgba(255, 255, 255, 0.1)",
 ];
 
-const SkeletonBones = forwardRef(({ size = 180 }: ISkeletonBones, ref: ForwardedRef<any>) => {
+export default function SkeletonBones({ size = 180, style }: ISkeletonBones) {
   const xAxis = useSharedValue(-size / 1.2);
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -36,17 +36,10 @@ const SkeletonBones = forwardRef(({ size = 180 }: ISkeletonBones, ref: Forwarded
   }, [size]);
 
   return (
-    <SkeletonContainer
-      ref={ref}
-      style={{
-        width: size,
-      }}
-    >
+    <SkeletonContainer style={[{ width: size }, style]}>
       <AnimatedSkeleton style={animatedStyle}>
         <SekeletonGradient colors={gradientColors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} />
       </AnimatedSkeleton>
     </SkeletonContainer>
   );
-});
-
-export default SkeletonBones;
+}

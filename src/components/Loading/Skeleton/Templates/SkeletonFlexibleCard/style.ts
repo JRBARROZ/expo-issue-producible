@@ -25,7 +25,7 @@ const DescriptionWrapper = styled.View`
 
 const TitleBone = styled(SkeletonBones)`
   height: 34px;
-  background-color: #000;
+  background-color: ${({ theme }) => theme.colors.secondary?.[200]};
 `;
 
 const DescriptionBone = styled(SkeletonBones)`
@@ -35,7 +35,6 @@ const DescriptionBone = styled(SkeletonBones)`
 
 const ProfileBone = styled(SkeletonBones)`
   height: 76px;
-  width: 46px;
   background-color: ${({ theme }) => theme.colors.secondary?.[200]};
   position: absolute;
   right: 0;

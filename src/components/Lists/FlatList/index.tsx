@@ -1,29 +1,25 @@
-import React, { ForwardedRef, forwardRef } from "react";
+import React from "react";
 import { FlatList as List } from "react-native-gesture-handler";
 import { SpinnerLoading } from "../../Loading";
 import accessObjectByString from "../../../utils/accessObjectByString";
 import { IFlatLisProps } from "./types";
 import EmptyComponent from "@/components/EmptyComponent";
 
-function FlatListComponent<T = any>(
-  {
-    data,
-    renderItem,
-    onEndReached,
-    ListEmptyComponent,
-    ListFooterComponent,
-    loading,
-    itemKeyExtractor,
-    emptyMessage,
-    contentContainerStyle,
-    style,
-    ...props
-  }: IFlatLisProps<T>,
-  ref: ForwardedRef<any>,
-) {
+export default function FlatListComponent<T = any>({
+  data,
+  renderItem,
+  onEndReached,
+  ListEmptyComponent,
+  ListFooterComponent,
+  loading,
+  itemKeyExtractor,
+  emptyMessage,
+  contentContainerStyle,
+  style,
+  ...props
+}: IFlatLisProps<T>) {
   return (
     <List
-      ref={ref}
       data={data}
       style={style}
       contentContainerStyle={contentContainerStyle}
@@ -50,11 +46,3 @@ function FlatListComponent<T = any>(
     />
   );
 }
-
-type FlatListPropsAssertion = <T = any>(
-  props: IFlatLisProps<T> & { ref?: ForwardedRef<any> },
-) => ReturnType<typeof FlatListComponent>;
-
-const FlatList = forwardRef(FlatListComponent) as FlatListPropsAssertion;
-
-export default FlatList;

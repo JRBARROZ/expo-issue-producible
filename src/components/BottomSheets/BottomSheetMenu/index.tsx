@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useMemo, useRef } from "react";
+import React, { ForwardedRef, forwardRef, useMemo } from "react";
 import { View, Text, Dimensions, TouchableOpacity } from "react-native";
 import { useBottomSheetDynamicSnapPoints } from "@gorhom/bottom-sheet";
 import styles from "./styles";

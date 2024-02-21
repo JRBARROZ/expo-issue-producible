@@ -1,22 +1,17 @@
-import React, { ForwardedRef, forwardRef } from "react";
+import React from "react";
 import { IIconProps } from "./types";
 import { ExpoVectorIcon } from "@/types/ExpoVectorIcons";
 
-const IconComponent = <T extends ExpoVectorIcon>(
-  { icon, name, color, size = 2, style }: IIconProps<T>,
-  ref: ForwardedRef<any>,
-) => {
+export default function IconComponent<T extends ExpoVectorIcon>({
+  icon,
+  name,
+  color,
+  size = 2,
+  style,
+}: IIconProps<T>) {
   const Icon = icon as ExpoVectorIcon;
 
   if (!icon) return null;
 
-  return <Icon ref={ref} name={name} color={color} size={size} style={style} />;
-};
-
-type IIconAssertion = <T extends ExpoVectorIcon>(
-  props: IIconProps<T> & { ref?: ForwardedRef<any> },
-) => ReturnType<typeof IconComponent>;
-
-const Icon = forwardRef(IconComponent) as IIconAssertion;
-
-export default Icon;
+  return <Icon name={name} color={color} size={size} style={style} />;
+}

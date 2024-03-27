@@ -16,7 +16,7 @@ const baseColors: IColorsPattern = {
 
 const lightColors: IColors = {
   primary: {
-    0: "#cbc7ff",
+    0: "#F1EFFF",
     50: "#A098FF",
     100: "#8473FC",
     200: "#6452E8",

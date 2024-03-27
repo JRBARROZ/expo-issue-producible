@@ -1,33 +1,32 @@
-
 type actions = 'edit' | 'delete' | 'view' | 'print' | 'download' | 'cancel' | 'confirm';
 
-interface IColumns {
+interface IColumns<T> {
     name: string;
     label: string;
     type: 'string' | 'number' | 'boolean' | 'date' | 'date-hour';
-    format?: (value: any, row: any) => string | React.ReactNode;
-    alignHead?: 'flex-start' | 'center' | 'flex-end';
-    alignRow?: 'flex-start' | 'center' | 'flex-end';
-    disableActionCondition?: (value: { [key: string]: any }, action: actions) => boolean;
+    format?: (value: any, row: T) => string | React.ReactNode;
+    head?: 'flex-start' | 'center' | 'flex-end';
+    body?: 'flex-start' | 'center' | 'flex-end';
+    disableActionCondition?: (value: T, action: actions) => boolean;
     mask?: RegExp;
     disablePast?: boolean;
     disableFuture?: boolean;
 }
 
-interface IAction {
+interface IAction<T> {
     icon: React.ReactNode;
     iconName: string;
-    handler: (data: any) => void;
-    disabled: (data: any) => boolean;
+    handler: (data: T) => void;
+    disabled: (data: T) => boolean;
 }
 
-interface ITableProps {
+interface ITableProps<T> {
     title?: string;
-    data: Array<{ [key: string]: any }>
-    columns: Array<IColumns>;
+    data: T[];
+    columns: IColumns<T>[];
     loading?: boolean;
     emptyMessage?: string;
-    actions?: IAction[];
+    actions?: IAction<T>[];
 }
 
-export { ITableProps, IColumns }
+export { ITableProps, IColumns };

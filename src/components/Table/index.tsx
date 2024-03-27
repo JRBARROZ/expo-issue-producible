@@ -1,7 +1,6 @@
 import React from "react";
-import { ITableProps } from "./types";
+import { IColumns, ITableProps } from "./types";
 import {
-  Container,
   EmptyContainer,
   LabelContainer,
   LabelHeader,
@@ -13,20 +12,27 @@ import {
 } from "./styles";
 import accessObjectByString from "@/utils/accessObjectByString";
 import { format, parseISO } from "date-fns";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useTheme } from "styled-components/native";
 
-const Table = ({ title, columns, data, actions = [], emptyMessage, loading }: ITableProps) => {
+const Table = <T,>({
+  title,
+  columns,
+  data,
+  actions = [],
+  emptyMessage,
+  loading,
+}: ITableProps<T>) => {
   const theme = useTheme();
 
   return (
-    <Container>
+    <View>
       <TitleContainer>{title && <Title>{title}</Title>}</TitleContainer>
       <TableHeader>
-        {columns.map((column) => (
+        {columns.map((column: IColumns<T>) => (
           <LabelContainer
             style={{
-              justifyContent: column.alignHead ? column.alignHead : "flex-start",
+              justifyContent: column.head ? column.head : "flex-start",
               width: `${100 / (columns.length + actions.length)}%`,
             }}
           >
@@ -73,138 +79,141 @@ const Table = ({ title, columns, data, actions = [], emptyMessage, loading }: IT
         </LineContainer>
       )}
 
-      {data.map((row, index) => (
-        <LineContainer
-          key={row.id}
-          style={{
-            backgroundColor: index % 2 === 0 ? theme.colors.primary?.[0] : "transparent",
-            borderBottomLeftRadius: index === data.length - 1 ? 8 : 0,
-            borderBottomRightRadius: index === data.length - 1 ? 8 : 0,
-          }}
-        >
-          {columns.map((column) => {
-            switch (column.type) {
-              case "string":
-                return (
-                  <LabelContainer
-                    style={{
-                      justifyContent: column.alignRow ? column.alignRow : "flex-start",
-                      width: `${100 / (columns.length + actions.length)}%`,
-                    }}
-                  >
-                    <LabelLine>
-                      {column.format
-                        ? column.format(accessObjectByString(row, column.name), row)
-                        : accessObjectByString(row, column.name)}
-                    </LabelLine>
-                  </LabelContainer>
-                );
+      {data.map((row: any, index) => {
+        const lastItem = index === data.length - 1;
+        return (
+          <LineContainer
+            key={index}
+            style={{
+              backgroundColor: index % 2 === 0 ? theme.colors.primary?.[0] : "transparent",
+              borderBottomLeftRadius: lastItem ? 8 : 0,
+              borderBottomRightRadius: lastItem ? 8 : 0,
+            }}
+          >
+            {columns.map((column) => {
+              switch (column.type) {
+                case "string":
+                  return (
+                    <LabelContainer
+                      style={{
+                        justifyContent: column.body ? column.body : "flex-start",
+                        width: `${100 / (columns.length + actions.length)}%`,
+                      }}
+                    >
+                      <LabelLine>
+                        {column.format
+                          ? column.format(accessObjectByString(row, column.name), row)
+                          : accessObjectByString(row, column.name)}
+                      </LabelLine>
+                    </LabelContainer>
+                  );
 
-              case "number":
-                return (
-                  <LabelContainer
-                    style={{
-                      justifyContent: column.alignRow ? column.alignRow : "flex-start",
-                      width: `${100 / (columns.length + actions.length)}%`,
-                    }}
-                  >
-                    <LabelLine>
-                      {column.format
-                        ? column.format(accessObjectByString(row, column.name), row)
-                        : accessObjectByString(row, column.name)}
-                    </LabelLine>
-                  </LabelContainer>
-                );
+                case "number":
+                  return (
+                    <LabelContainer
+                      style={{
+                        justifyContent: column.body ? column.body : "flex-start",
+                        width: `${100 / (columns.length + actions.length)}%`,
+                      }}
+                    >
+                      <LabelLine>
+                        {column.format
+                          ? column.format(accessObjectByString(row, column.name), row)
+                          : accessObjectByString(row, column.name)}
+                      </LabelLine>
+                    </LabelContainer>
+                  );
 
-              case "date":
-                return (
-                  <LabelContainer
-                    style={{
-                      justifyContent: column.alignRow ? column.alignRow : "flex-start",
-                      width: `${100 / (columns.length + actions.length)}%`,
-                    }}
-                  >
-                    <LabelLine>
-                      {column.format
-                        ? column.format(accessObjectByString(row, column.name), row)
-                        : null}
+                case "date":
+                  return (
+                    <LabelContainer
+                      style={{
+                        justifyContent: column.body ? column.body : "flex-start",
+                        width: `${100 / (columns.length + actions.length)}%`,
+                      }}
+                    >
+                      <LabelLine>
+                        {column.format
+                          ? column.format(accessObjectByString(row, column.name), row)
+                          : null}
 
-                      {accessObjectByString(row, column.name) instanceof Date
-                        ? format(accessObjectByString(row, column.name), "dd/MM/yyyy")
-                        : format(parseISO(accessObjectByString(row, column.name)), "dd/MM/yyyy")}
-                    </LabelLine>
-                  </LabelContainer>
-                );
-              case "date-hour":
-                return (
-                  <LabelContainer
-                    style={{
-                      justifyContent: column.alignRow ? column.alignRow : "flex-start",
-                      width: `${100 / (columns.length + actions.length)}%`,
-                    }}
-                  >
-                    <LabelLine>
-                      {column.format
-                        ? column.format(accessObjectByString(row, column.name), row)
-                        : null}
+                        {accessObjectByString(row, column.name) instanceof Date
+                          ? format(accessObjectByString(row, column.name), "dd/MM/yyyy")
+                          : format(parseISO(accessObjectByString(row, column.name)), "dd/MM/yyyy")}
+                      </LabelLine>
+                    </LabelContainer>
+                  );
+                case "date-hour":
+                  return (
+                    <LabelContainer
+                      style={{
+                        justifyContent: column.body ? column.body : "flex-start",
+                        width: `${100 / (columns.length + actions.length)}%`,
+                      }}
+                    >
+                      <LabelLine>
+                        {column.format
+                          ? column.format(accessObjectByString(row, column.name), row)
+                          : null}
 
-                      {accessObjectByString(row, column.name) instanceof Date
-                        ? format(accessObjectByString(row, column.name), "dd/MM/yyyy HH:mm")
-                        : format(
-                            parseISO(accessObjectByString(row, column.name)),
-                            "dd/MM/yyyy HH:mm",
-                          )}
-                    </LabelLine>
-                  </LabelContainer>
-                );
+                        {accessObjectByString(row, column.name) instanceof Date
+                          ? format(accessObjectByString(row, column.name), "dd/MM/yyyy HH:mm")
+                          : format(
+                              parseISO(accessObjectByString(row, column.name)),
+                              "dd/MM/yyyy HH:mm",
+                            )}
+                      </LabelLine>
+                    </LabelContainer>
+                  );
 
-              case "boolean":
-                return (
-                  <LabelContainer
-                    style={{
-                      justifyContent: column.alignRow ? column.alignRow : "flex-start",
-                      width: `${100 / (columns.length + actions.length)}%`,
-                    }}
-                  >
-                    <LabelLine>
-                      {column.format
-                        ? column.format(accessObjectByString(row, column.name), row)
-                        : accessObjectByString(row, column.name)
-                          ? "Ativo"
-                          : "Inativo"}
-                    </LabelLine>
-                  </LabelContainer>
-                );
-              default:
-                return null;
-            }
-          })}
-          {actions && (
-            <LabelContainer
-              style={{
-                justifyContent: "center",
-                width: `${100 / (columns.length + actions.length)}%`,
-              }}
-            >
-              {actions.map((action) => (
-                <LabelLine>
-                  <TouchableOpacity
-                    key={action.iconName}
-                    onPress={() => action.handler(row)}
-                    disabled={action.disabled(row)}
-                    style={{
-                      opacity: action.disabled(row) ? 0.2 : 1,
-                    }}
-                  >
-                    {action.icon}
-                  </TouchableOpacity>
-                </LabelLine>
-              ))}
-            </LabelContainer>
-          )}
-        </LineContainer>
-      ))}
-    </Container>
+                case "boolean":
+                  return (
+                    <LabelContainer
+                      style={{
+                        justifyContent: column.body ? column.body : "flex-start",
+                        width: `${100 / (columns.length + actions.length)}%`,
+                      }}
+                    >
+                      <LabelLine>
+                        {column.format
+                          ? column.format(accessObjectByString(row, column.name), row)
+                          : accessObjectByString(row, column.name)
+                            ? "Ativo"
+                            : "Inativo"}
+                      </LabelLine>
+                    </LabelContainer>
+                  );
+                default:
+                  return null;
+              }
+            })}
+            {actions && (
+              <LabelContainer
+                style={{
+                  justifyContent: "center",
+                  width: `${100 / (columns.length + actions.length)}%`,
+                }}
+              >
+                {actions.map((action) => (
+                  <LabelLine>
+                    <TouchableOpacity
+                      key={action.iconName}
+                      onPress={() => action.handler(row)}
+                      disabled={action.disabled(row)}
+                      style={{
+                        opacity: action.disabled(row) ? 0.2 : 1,
+                      }}
+                    >
+                      {action.icon}
+                    </TouchableOpacity>
+                  </LabelLine>
+                ))}
+              </LabelContainer>
+            )}
+          </LineContainer>
+        );
+      })}
+    </View>
   );
 };
 

@@ -1,10 +1,5 @@
 import styled from "styled-components/native";
 
-
-const Container = styled.View`
-    
-`;
-
 const TitleContainer = styled.View`
     flex-direction: row;
     align-items: center;
@@ -63,4 +58,4 @@ const Title = styled.Text`
 `;
 
 
-export { Container, TitleContainer, Title, TableHeader, LabelHeader, LineContainer, LabelLine, LabelContainer, EmptyContainer }
+export { TitleContainer, Title, TableHeader, LabelHeader, LineContainer, LabelLine, LabelContainer, EmptyContainer }

@@ -2,6 +2,7 @@ import React from "react";
 import { ITableProps } from "./types";
 import {
   Container,
+  EmptyContainer,
   LabelContainer,
   LabelHeader,
   LabelLine,
@@ -13,8 +14,11 @@ import {
 import accessObjectByString from "@/utils/accessObjectByString";
 import { format, parseISO } from "date-fns";
 import { TouchableOpacity } from "react-native";
+import { useTheme } from "styled-components/native";
 
-const Table = ({ title, columns, data, actions = [] }: ITableProps) => {
+const Table = ({ title, columns, data, actions = [], emptyMessage, loading }: ITableProps) => {
+  const theme = useTheme();
+
   return (
     <Container>
       <TitleContainer>{title && <Title>{title}</Title>}</TitleContainer>
@@ -41,11 +45,39 @@ const Table = ({ title, columns, data, actions = [] }: ITableProps) => {
         )}
       </TableHeader>
 
+      {loading && !data.length && (
+        <LineContainer
+          style={{
+            backgroundColor: theme.colors.primary?.[0],
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
+          }}
+        >
+          <EmptyContainer>
+            <LabelLine>Carregando...</LabelLine>
+          </EmptyContainer>
+        </LineContainer>
+      )}
+
+      {!loading && !data.length && (
+        <LineContainer
+          style={{
+            backgroundColor: theme.colors.primary?.[0],
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
+          }}
+        >
+          <EmptyContainer>
+            <LabelLine>{emptyMessage ?? "Nenhum dado encontrado :("} </LabelLine>
+          </EmptyContainer>
+        </LineContainer>
+      )}
+
       {data.map((row, index) => (
         <LineContainer
           key={row.id}
           style={{
-            backgroundColor: index % 2 === 0 ? "#F1EFF2" : "transparent",
+            backgroundColor: index % 2 === 0 ? theme.colors.primary?.[0] : "transparent",
             borderBottomLeftRadius: index === data.length - 1 ? 8 : 0,
             borderBottomRightRadius: index === data.length - 1 ? 8 : 0,
           }}

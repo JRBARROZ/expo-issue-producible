@@ -34,6 +34,13 @@ const LabelContainer = styled.View`
     padding: 12px;
 `;
 
+const EmptyContainer = styled.View`
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+`;
+
 
 const LabelHeader = styled.Text`
     font-family: ${({ theme }) => theme.typography.fonts.primary.semibold};
@@ -56,4 +63,4 @@ const Title = styled.Text`
 `;
 
 
-export { Container, TitleContainer, Title, TableHeader, LabelHeader, LineContainer, LabelLine, LabelContainer }
+export { Container, TitleContainer, Title, TableHeader, LabelHeader, LineContainer, LabelLine, LabelContainer, EmptyContainer }

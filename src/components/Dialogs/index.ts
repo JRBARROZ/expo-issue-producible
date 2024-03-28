@@ -1,3 +1,3 @@
 import Alert from "./Alert";
-
-export { Alert };
+import Modal from "./Modal";
+export { Alert, Modal };

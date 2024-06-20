@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useCallback, useState } from "react";
+import { conn } from "@/config/db";
+import { ReactNode, createContext, useCallback, useEffect, useState } from "react";
 
 interface ILoadingConfig {
   isLoading?: boolean;
@@ -36,7 +37,19 @@ const GlobalContext = createContext<IGlobalContextProps | null>(null);
 function GlobalContextProvider({ children }: IGlobalContextProviderProps) {
   const [loadingConfig, setLoadingConfig] = useState<ILoadingConfig>(initialLoadingConfig);
   const [notifierStates, setNotifierStates] = useState<INotifierStates | null>(null);
-
+  useEffect(() => {
+    const initializateDb = async () => {
+      conn.initialize().then(
+        () => {
+          console.log("Initialized");
+        },
+        (err) => {
+          console.log("Error", err);
+        },
+      );
+    };
+    initializateDb();
+  }, []);
   const loading = useCallback(
     (options: ILoadingConfig) => {
       setLoadingConfig((loadingConfig) => {

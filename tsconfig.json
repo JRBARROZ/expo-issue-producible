@@ -1,5 +1,6 @@
 {
   "extends": "expo/tsconfig.base",
+  "experimentalDecorators": false,
   "compilerOptions": {
     "strict": true,
     "baseUrl": "./src",

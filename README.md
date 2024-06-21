@@ -1,4 +1,4 @@
-### Execute Projetc
+### Execute Project
 
 yarn & yarn start and run on android device.
 

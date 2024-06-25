@@ -1,5 +1,5 @@
 import { MainButton } from "@/components/Buttons";
-import { useRepository } from "@/config/useRepository";
+import useRepository from "@/config/useRepository";
 import { Text, View } from "react-native";
 
 function Profile() {
@@ -9,7 +9,7 @@ function Profile() {
       <Text>Profile screen</Text>
       <MainButton
         onPress={() => {
-          repo.postTest();
+          repo.createUser();
         }}
       >
         PRESS ME TO BUG SQLITE WITH TYPEORM

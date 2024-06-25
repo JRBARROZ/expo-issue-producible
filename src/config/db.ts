@@ -1,19 +1,13 @@
-import { DataSource, DataSourceOptions } from "typeorm";
-import * as SQLite from "expo-sqlite";
-import { Category, Post } from "./entitites";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { openDatabaseSync } from "expo-sqlite";
 
-export const config: DataSourceOptions = {
-  database: "mydb.db",
-  type: "expo",
-  driver: SQLite,
-  entities: [Category, Post],
-  logging: true,
-  logger: "simple-console",
-  synchronize: true,
-  entitySkipConstructor: true,
-  dropSchema: true,
-};
+const expo = openDatabaseSync("mydb.db", {
+  enableChangeListener: true,
+});
 
-const conn = new DataSource(config);
+expo.execSync("PRAGMA foreign_keys = ON");
+expo.execSync("PRAGMA journal_mode = WAL");
 
-export { conn };
+const db = drizzle(expo);
+
+export { db, expo };

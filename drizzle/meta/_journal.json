@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1718976636917,
+      "tag": "0000_futuristic_shinko_yamashiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1718977291936,
+      "tag": "0001_strong_rogue",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1719096592755,
+      "tag": "0002_unknown_scream",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1719096615015,
+      "tag": "0003_majestic_mercury",
+      "breakpoints": true
+    }
+  ]
+}
